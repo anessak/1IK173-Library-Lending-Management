@@ -1,9 +1,5 @@
 /BooksManagement/logs/**
 /BooksManagement/resources/*.db
-/out/production/BooksManagement/com/llm/booksmanagement/*.class
-/out/production/Library-Lending-Management/drawiodiagram.svg
-/out/production/Library-Lending-Management/com/llm/ui/*.class
-/out/production/MembershipAdministration/com/llm/membershipadmin/*.class
-/out/production/MembershipLending/com/llm/membershiplending/*.class
-/out/production/Library-Lending-Management/UseCaseDiagram.drawio
-/out/production/Library-Lending-Management/UseCases.jpg
+/out/production/**
+/out/test/**
+
