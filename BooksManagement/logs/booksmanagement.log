@@ -1,3 +1,0 @@
-2020-05-05 01:15:20,973 [main] INFO RollingFileLogger - Entering constructor
-2020-05-05 01:15:20,982 [main] INFO RollingFileLogger - Creating database and tables
-2020-05-05 01:15:21,059 [main] ERROR RollingFileLogger - path to 'BooksManagement/db/BooksDB.db': 'C:\Users\arman\IdeaProjects\1IK173-Library-Lending-Management\BooksManagement\db' does not exist
