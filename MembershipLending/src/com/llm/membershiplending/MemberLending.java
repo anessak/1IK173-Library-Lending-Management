@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class MemberLending {
     private int memberId;
     private ArrayList<LendingBasket> lendingItems;
-    private int delayedReturnCounter;
+    private int delayedReturnBorrowedBooksCounter;
     private int suspendedTimesCounter;
 
     public MemberLending()
     {
-        this.delayedReturnCounter=0;
+        this.delayedReturnBorrowedBooksCounter=0;
         this.suspendedTimesCounter=0;
         this.lendingItems= new ArrayList<>();
     }
