@@ -10,3 +10,10 @@ Man bör också rita scenario
 
 ## Use Case Diagram
 ![GitHub Logo](.documentation/UseCases.jpg)
+
+## Modules
+Förslag till moduler i systemet. 
+1. MembershipAdministration hanterar allt kring användare, roler, status (låst, borttagen) och login...
+1. BookManagement hanterar allt kring böcker, titlar, fysiska böcker, antal tillgängliga...
+1. MembershipLending hanterar medlemarnas utlåningar, håller reda på när böcker ska lämnas, hur många böcker man inte lämna, om man blir reglerad.
+<img src=".documentation/drawiodiagram.svg" width="60%">
