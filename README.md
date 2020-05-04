@@ -8,5 +8,5 @@ Man bör också rita scenario
 1. Ta bort medlem på egen begäran.
 1. Ta bort medlem (reglera) på grund av "breach".
 
-####Use Case
+#### Use Case
 ![GitHub Logo](.documentation/UseCases.jpg)
