@@ -1,4 +1,5 @@
 /BooksManagement/logs/
+/BooksManagement/db/
 /out/production/BooksManagement/com/llm/booksmanagement/BookItem.class
 /out/production/BooksManagement/com/llm/booksmanagement/BookItemState.class
 /out/production/BooksManagement/com/llm/booksmanagement/BookManagementManager.class
