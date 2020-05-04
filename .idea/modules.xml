@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BooksManagement/BooksManagement.iml" filepath="$PROJECT_DIR$/BooksManagement/BooksManagement.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Library-Lending-Management.iml" filepath="$PROJECT_DIR$/Library-Lending-Management.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MembershipAdministration/MembershipAdministration.iml" filepath="$PROJECT_DIR$/MembershipAdministration/MembershipAdministration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MembershipLending/MembershipLending.iml" filepath="$PROJECT_DIR$/MembershipLending/MembershipLending.iml" />
+    </modules>
+  </component>
+</project>
