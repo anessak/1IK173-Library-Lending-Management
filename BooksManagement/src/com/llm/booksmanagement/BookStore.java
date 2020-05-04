@@ -18,7 +18,7 @@ public class BookStore implements IBookStore {
     public BookStore() {
         logger.info("Entering constructor");
 
-        this.connectionString="jdbc:sqlite:BooksManagement/db/BooksDB.db";
+        this.connectionString="jdbc:sqlite:BooksManagement/resources/BooksDB.db";
         this.createDatabaseAndTables();
     }
     public BookStore(String connStr) {

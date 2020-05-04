@@ -1,5 +1,5 @@
 /BooksManagement/logs/**
-/BooksManagement/db/**
+/BooksManagement/resources/*.db
 /out/production/BooksManagement/com/llm/booksmanagement/*.class
 /out/production/Library-Lending-Management/drawiodiagram.svg
 /out/production/Library-Lending-Management/com/llm/ui/*.class
