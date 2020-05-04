@@ -1,5 +1,5 @@
 # 1IK173-Library-Lending-Management
-## Use Case Diagram
+## Viktiga Use Case (användningsfall) 
 Första försök att förstå vilka use cases det finns.
 Man bör också rita scenario
 1. Låna en eller fler bok "items".
@@ -8,5 +8,5 @@ Man bör också rita scenario
 1. Ta bort medlem på egen begäran.
 1. Ta bort medlem (reglera) på grund av "breach".
 
-#### Use Case
+## Use Case Diagram
 ![GitHub Logo](.documentation/UseCases.jpg)
