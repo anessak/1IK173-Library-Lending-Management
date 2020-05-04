@@ -4,14 +4,12 @@ import com.llm.booksmanagement.*;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Date;
 import java.util.UUID;
 
 public class Main {
 
     public static void main(String[] args) {
-        BookRepository db=new BookRepository();
-        db.createDatabaseAndTables();
+        IBookStore db=new BookStore();
         db.insertNewBookTitle(new BookTitle("1122-2321-33123",
                 "bästa boken","Anessa Kurtagic",
                 LocalDateTime.of(2015, Month.FEBRUARY, 20, 6, 30)));

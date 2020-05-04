@@ -9,19 +9,18 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
-public class BookRepository {
+public class BookStore implements IBookStore {
 
     String connectionString ;
-    public BookRepository()
-    {
+    public BookStore() {
         this.connectionString="jdbc:sqlite:BooksManagement/src/BooksDB.db";
+        this.createDatabaseAndTables();
     }
-    public BookRepository(String connStr)
-    {
+    public BookStore(String connStr) {
         this.connectionString=connStr;
     }
 
-    public void createDatabaseAndTables() {
+    private void createDatabaseAndTables() {
         SQLiteConfig config = new SQLiteConfig();
         config.enforceForeignKeys(true);
         try (Connection conn = DriverManager.getConnection(this.connectionString,config.toProperties())){
