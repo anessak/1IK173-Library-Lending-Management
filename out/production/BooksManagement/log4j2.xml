@@ -5,7 +5,7 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
         <RollingFile name="RollingFileAppender" fileName="BooksManagement/logs/booksmanagement.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="BooksManagement/logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.zip">
             <PatternLayout>
                 <Pattern>%d [%t] %p %c - %m%n</Pattern>
             </PatternLayout>
