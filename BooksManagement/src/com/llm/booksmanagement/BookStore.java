@@ -1,5 +1,7 @@
 package com.llm.booksmanagement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
@@ -10,9 +12,12 @@ import java.util.Date;
 import java.util.UUID;
 
 public class BookStore implements IBookStore {
-
+    private static Logger logger = LogManager.getLogger("RollingFileLogger");
     String connectionString ;
+
     public BookStore() {
+        logger.info("Entering constructor");
+
         this.connectionString="jdbc:sqlite:BooksManagement/src/BooksDB.db";
         this.createDatabaseAndTables();
     }
@@ -21,6 +26,7 @@ public class BookStore implements IBookStore {
     }
 
     private void createDatabaseAndTables() {
+        logger.info("Creating database and tables");
         SQLiteConfig config = new SQLiteConfig();
         config.enforceForeignKeys(true);
         try (Connection conn = DriverManager.getConnection(this.connectionString,config.toProperties())){
@@ -37,8 +43,10 @@ public class BookStore implements IBookStore {
 
             createDbStatement.closeOnCompletion();
 
+            logger.info("Book database succesfully created");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
     public void insertNewBookTitle(BookTitle bokTitle) {

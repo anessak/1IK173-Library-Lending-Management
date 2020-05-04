@@ -1,0 +1,3 @@
+2020-05-05 00:58:52,781 [main] INFO RollingFileLogger - Entering constructor
+2020-05-05 00:58:52,792 [main] INFO RollingFileLogger - Creating database and tables
+2020-05-05 00:58:53,227 [main] INFO RollingFileLogger - Book database succesfully created
