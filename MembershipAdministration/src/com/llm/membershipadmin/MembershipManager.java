@@ -29,4 +29,7 @@ public class MembershipManager {
 
     }
 
+    public void suspendRegistrationHandler(int memberId){
+        //receive message from Lending and then update user status to suspended.
+    }
 }
