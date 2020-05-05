@@ -9,7 +9,7 @@ Man bör också rita scenario
 1. Ta bort medlem (reglera) på grund av "breach".
 
 ## Use Case Diagram
-![GitHub Logo](.documentation/UseCases.jpg)
+<img src=".documentation/UseCaseDiagram.svg" width="75%">
 
 ## Modules
 Förslag till moduler i systemet. 
