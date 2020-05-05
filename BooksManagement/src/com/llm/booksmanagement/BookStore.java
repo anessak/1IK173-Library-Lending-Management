@@ -12,10 +12,11 @@ import java.util.Date;
 import java.util.UUID;
 
 public class BookStore implements IBookStore {
-    private static Logger logger = LogManager.getLogger("RollingFileLogger");
+    private static Logger logger;
     String connectionString ;
 
-    public BookStore() {
+    public BookStore(Logger logger) {
+        BookStore.logger =logger;
         logger.info("Entering constructor");
 
         this.connectionString="jdbc:sqlite:BooksManagement/resources/BooksDB.db";
@@ -61,12 +62,13 @@ public class BookStore implements IBookStore {
             bookTitleInsertSql.executeUpdate();
 
             PreparedStatement bookItemInsertSql =
-                    conn.prepareStatement("INSERT INTO BookItems(id, itemtype, dateadded, itemstate) VALUES(?,?,?,?)");
+                    conn.prepareStatement("INSERT INTO BookItems(id, itemtype, dateadded, itemstate, bookisbn) VALUES(?,?,?,?,?)");
             for (BookItem bookItem: bokTitle.getAvailableBookItems()) {
                 bookItemInsertSql.setString(1,bookItem.getId().toString());
                 bookItemInsertSql.setString(2,bookItem.getItemType().name());
                 bookItemInsertSql.setString(3,bookItem.getDateAdded().toString());
                 bookItemInsertSql.setString(4,bookItem.getItemState().name());
+                bookItemInsertSql.setString(5,bokTitle.getIsbn());
                 bookItemInsertSql.executeUpdate();
             }
 
@@ -95,8 +97,12 @@ public class BookStore implements IBookStore {
         BookTitle bookTitle=new BookTitle();
         ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
-            PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
-            pstmt.setString(1,isbn);
+            //PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
+            //pstmt.setString(1,isbn);
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT * FROM BookTitles WHERE UPPER(isbn) LIKE ?");
+            pstmt.setString(1, isbn.toUpperCase() + "%");
+
             ResultSet result = pstmt.executeQuery();
             while (result.next()) {
                 bookTitle= new BookTitle(result.getString("isbn"),
@@ -114,8 +120,11 @@ public class BookStore implements IBookStore {
         BookTitle bookTitle=new BookTitle();
         ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
-            PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
-            pstmt.setString(1,isbn);
+            //PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
+            //pstmt.setString(1,isbn);
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT * FROM BookTitles WHERE UPPER(isbn) LIKE ?");
+            pstmt.setString(1, isbn.toUpperCase() + "%");
             ResultSet bookResult = pstmt.executeQuery();
             while (bookResult.next()) {
                 bookTitle= new BookTitle(bookResult.getString("isbn"),
@@ -125,7 +134,7 @@ public class BookStore implements IBookStore {
             }
 
             PreparedStatement itemsStm  = conn.prepareStatement("SELECT * FROM BookItems WHERE bookisbn = ?");
-            itemsStm.setString(1,isbn);
+            itemsStm.setString(1,bookTitle.getIsbn());
             ResultSet bookItemsResult = itemsStm.executeQuery();
             while (bookItemsResult.next()) {
                 bookTitle.addBookItem(new BookItem(UUID.fromString(bookItemsResult.getString("id")),
