@@ -19,17 +19,17 @@ public class Main {
                 "bästa boken","Anessa Kurtagic",
                 LocalDateTime.of(2015, Month.FEBRUARY, 20, 6, 30));
 
-        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.New));
-        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.Good));
-        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.Bad));
-        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Audio, BookItemState.New));
+        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.HomeInLibrary));
+        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.HomeInLibrary));
+        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.BorrowedToMember));
+        bookTitleA.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Audio, BookItemState.HomeInLibrary));
 
         var bookTitleB= new BookTitle("9992-2321-31230",
                 "Äntligen Monarki igen!","Kungen är Bäst",
                 LocalDateTime.of(2020, Month.FEBRUARY, 21, 2, 10));
-        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.New));
-        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.Good));
-        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Video, BookItemState.New));
+        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.HomeInLibrary));
+        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Paper, BookItemState.HomeInLibrary));
+        bookTitleB.addBookItem(new BookItem(UUID.randomUUID(), ItemType.Video, BookItemState.Lost));
 
         bm.addBookTitleToLibrary(bookTitleA);
         bm.addBookTitleToLibrary(bookTitleB);

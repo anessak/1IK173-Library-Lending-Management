@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class BookManagementManager {
     //use cases for book
@@ -28,13 +29,23 @@ public class BookManagementManager {
                     bokToSave.getIsbn(),bokToSave.getTitle(),bokToSave.getAuthor(), bokToSave.getReleaseDate());
         }
 
+
     }
     public BookTitle searchBookTitlebyIsbn(String isbn){
         logger.info("Searching för bok with isbn: {}",isbn);
         return this.bookStore.getBookTitleWithItems(isbn);
     }
-    public ArrayList<BookTitle> searchBookTitlebyTitle(String title){
-        return null;
-    }
 
+    public void bokItemHasBeenReturned(UUID bookItemId) {
+        //find bookItem via bookItemId from database
+
+        //Update found bookItem by updating bookItem state to HomeInLibrary
+
+    }
+    public void bokItemHasBeenBorrowed(UUID bookItemId) {
+        //find bookItem via bookItemId from database
+
+        //Update found bookItem by updating bookItem state to Borrowed
+
+    }
 }
