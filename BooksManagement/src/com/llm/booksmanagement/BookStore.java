@@ -12,11 +12,11 @@ import java.util.Date;
 import java.util.UUID;
 
 public class BookStore implements IBookStore {
-    private static Logger logger;
+    private Logger logger;
     String connectionString ;
 
     public BookStore(Logger logger) {
-        BookStore.logger =logger;
+        this.logger =logger;
         logger.info("Entering constructor");
 
         this.connectionString="jdbc:sqlite:BooksManagement/resources/BooksDB.db";

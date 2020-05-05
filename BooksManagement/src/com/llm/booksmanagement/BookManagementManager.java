@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class BookManagementManager {
     //use cases for book
     IBookStore bookStore;
-    private static Logger logger;
+    private Logger logger;
     public BookManagementManager(IBookStore bokStore, Logger logger){
 
         this.bookStore=bokStore;
-        BookManagementManager.logger =logger;
+        this.logger =logger;
         logger.info("Finished constructor of BookManagementManager");
     }
 
