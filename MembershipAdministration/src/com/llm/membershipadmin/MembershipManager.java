@@ -28,8 +28,13 @@ public class MembershipManager {
     public void cancelMemberShip(int memberId){
 
     }
-
+    public boolean login(int memberId, String password){
+        return false;
+    }
     public void suspendRegistrationHandler(int memberId){
         //receive message from Lending and then update user status to suspended.
+    }
+    public void removeMemberDueToRegulationBreach(int memberId) {
+        //receive message from Lending and then update user status to breach-deleted.
     }
 }
