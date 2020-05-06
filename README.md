@@ -42,12 +42,12 @@ Förslag till moduler i systemet.
 <img src=".documentation/drawiodiagram.svg" width="60%">
 
 ## Class Diagrams
-### MembershipAdministration module
+### BookManagement module
 Man bör beskriva vad olika metoder gör...
 
 <img src=".documentation/booksmanagement.svg">
 
-### BookManagement module
+### MembershipAdministration module
 Man bör beskriva vad olika metoder gör...
 <img src=".documentation/membershipadmin.svg">
 
