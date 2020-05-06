@@ -22,14 +22,13 @@ Man bör också rita scenarion.
 
 ### Förklaring av Use Cases
 #### Register Member (Skapa ny användare)
-Man skapar ny användare med id, namn osv., med en specifik roll och den sparas i databasen.
-När den har sparats skickas meddelande OnMemberCreated som innehåller (memberId och maxantalBöcker man an låna) till modulen (MembershipLending).
-När MembershipLending får meddelandet sparar den ny post i databasen med attribut för att senare när man lånar böcker man kan kolla om man får låna och hur mycker böcker man får låna.
-1. memberId
-1. maxAntalBöckerManFårLåna  
-1. antaletGångerDelayedReturn
-1. antaletGångerSuspend
-
+1. Man skapar ny användare med id, namn osv., med en specifik roll och den sparas i databasen.
+1. När den har sparats skickas meddelande OnMemberCreated som innehåller (memberId och maxantalBöcker man an låna) till modulen (MembershipLending).
+1. När MembershipLending får meddelandet sparar den ny post i databasen med attribut för att senare när man lånar böcker man kan kolla om man får låna och hur mycker böcker man får låna.
+    * memberId
+    * maxAntalBöckerManFårLåna  
+    * antaletGångerDelayedReturn
+    * antaletGångerSuspend
 
 ## Use Case Diagram
 <img src=".documentation/UseCaseDiagram.svg" width="75%">
