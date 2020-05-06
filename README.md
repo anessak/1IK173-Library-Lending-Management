@@ -43,7 +43,7 @@ Förslag till moduler i systemet.
 ### MembershipAdministration module
 Man bör beskriva vad olika metoder gör...
 
-<img src=".documentation/bookmanagement.svg">
+<img src=".documentation/booksmanagement.svg">
 
 ### BookManagement module
 Man bör beskriva vad olika metoder gör...
