@@ -1,5 +1,9 @@
 /BooksManagement/logs/**
 /BooksManagement/resources/*.db
+/MembershipLending/logs/**
+/MembershipLending/resources/*.db
+/MembershipAdministration/logs/**
+MembershipAdministration/resources/*.db
 /out/production/**
 /out/test/**
-
+/.idea/dbnavigator.xml

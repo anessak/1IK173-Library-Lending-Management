@@ -1,25 +1,37 @@
 package com.llm.membershiplending;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
-public class MemberLending {
+public class MemberLending  {
     private int memberId;
-    private ArrayList<LendingBasket> lendingItems;
-    private int delayedReturnBorrowedBooksCounter;
-    private int suspendedTimesCounter;
+    private ArrayList<LendingBasketEntity> bookItemIdsWithDate;
 
-    public MemberLending()
+    public MemberLending(int mid)
     {
-        this.delayedReturnBorrowedBooksCounter=0;
-        this.suspendedTimesCounter=0;
-        this.lendingItems= new ArrayList<>();
+        this.memberId=mid;
+        this.bookItemIdsWithDate=new ArrayList<>();
+    }
+    public MemberLending(int mid, ArrayList<LendingBasketEntity> bookItemIds){
+        this.memberId=mid;
+        this.bookItemIdsWithDate=bookItemIds;
     }
 
-    public int maximumNumberOfItemsCanBorrow()
-    {
-        //kolla efter rollen och returnera
-        //kanske updatera efter när man lägger ny medlem?
-        return 0;
+    public int getMemberId() {
+        return memberId;
     }
+    public ArrayList<LendingBasketEntity> getBookItemIds() {
+        return this.bookItemIdsWithDate;
+    }
+
+
+    public void addBookItem(LendingBasketEntity bookItemId){
+        if (this.bookItemIdsWithDate==null)
+            this.bookItemIdsWithDate=new ArrayList<>();
+        this.bookItemIdsWithDate.add(bookItemId);
+    }
+
 
 }
