@@ -1,5 +1,8 @@
 # 1IK173-Library-Lending-Management
-Projektet består av en consol applikation och tre separata oberoende moduler. (See Modules sektion)
+### Introduktion
+Projektet består av en consol applikation och tre separata oberoende moduler. (See Modules sektion).
+Man använder openJDK 14. Om man har annat får man ändra det i Intellij under File, klicka på Project Structure och under Project Settings klicka på Project. Efter det visas till höger Project SKD dropdown där man ändrar.
+<img src=".documentation/ProjectJDK.jpg" width="75%">
 
 Man använder log4j för loggning, junit5 för unittester med mockito för mocking av klasser.
 Loggning sker till en fil och ska finnas under "modulen"/logs (Exempel: BookManagement/logs).
