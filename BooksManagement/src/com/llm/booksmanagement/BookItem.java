@@ -1,9 +1,6 @@
 package com.llm.booksmanagement;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 public class BookItem {
@@ -17,14 +14,15 @@ public class BookItem {
         this.id=UUID.randomUUID();
         this.dateAdded= LocalDateTime.now();
     }
-    public BookItem(UUID id, ItemType type, BookItemState state){
+    public BookItem(UUID id, ItemType type){
         this.id=id;
         this.itemType=type;
         this.dateAdded= LocalDateTime.now();
-        this.itemState=state;
+        this.itemState=BookItemState.HomeInLibrary;
     }
     public BookItem(UUID id, ItemType type, BookItemState state, LocalDateTime date,BookTitle bookRef){
-        this(id,type,state);
+        this(id,type);
+        this.itemState=state;
         this.dateAdded=date;
         this.referencedBook=bookRef;
     }
@@ -43,5 +41,9 @@ public class BookItem {
 
     public LocalDateTime getDateAdded() {
         return dateAdded;
+    }
+
+    public BookTitle getReferencedBook() {
+        return referencedBook;
     }
 }

@@ -67,7 +67,7 @@ public class MemberLendingStore implements IMemberLendingStore {
                             "VALUES(?,?,?)");
 
 
-            for (LendingBasketEntity bookItemId:memberLending.getBookItemIds()) {
+            for (LendingBasketEntity bookItemId:memberLending.getBookItemsIdWithDate()) {
                 lendingInsertSql.setInt(1, memberLending.getMemberId());
                 lendingInsertSql.setString(2, bookItemId.getBookItemId().toString());
                 lendingInsertSql.setString(3, bookItemId.getLendingDate().toString());
@@ -78,15 +78,15 @@ public class MemberLendingStore implements IMemberLendingStore {
         }
     }
     @Override
-    public void removeBookItemFromLending(ReturnLendBasket returnItems) {
+    public int removeBookItemFromLending(ReturnLendBasket returnItems) {
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             conn.setAutoCommit(false);
             PreparedStatement bookItemReturnSql =
                     conn.prepareStatement("INSERT INTO MemberReturnedLendings" +
                             "(memberid, bookitemid, returndate) VALUES(?, ?, ?)");
             PreparedStatement bookMemberItemReturnSql =
-                    conn.prepareStatement("DELETE FROM MemberCurrentLendings" +
-                            "WHERE bookitemid = ?");
+                    conn.prepareStatement("DELETE FROM MemberCurrentLendings WHERE bookitemid = ?");
+
             for (UUID returnBookId:returnItems.getBookItemIds()) {
                 bookItemReturnSql.setInt(1, returnItems.getMemberId());
                 bookItemReturnSql.setString(2, returnBookId.toString());
@@ -100,7 +100,9 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            return -1;
         }
+        return 0;
     }
     @Override
     public MemberLending getMemberBorrowedBookItems(int memberId){
@@ -126,7 +128,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             for (LendingBasketEntity le:memberBorrowedItemsEntity) {
                 memberBorrowedItems.addBookItem(le);
             }
-            Collections.sort(memberBorrowedItems.getBookItemIds());
+            Collections.sort(memberBorrowedItems.getBookItemsIdWithDate());
            /* Map<LocalDateTime, List<LendingBasketEntity>> entities = memberBorrowedItemsEntity.stream()
                     .collect(groupingBy(LendingBasketEntity::getLendingDate));
 
@@ -187,36 +189,22 @@ public class MemberLendingStore implements IMemberLendingStore {
         }
     }
     @Override
-    public void updateDelayedReturnCounter(int memberId, int delayedReturnNr) {
+    public void updateMemberCounters(int memberId, int delayedReturnNr, int suspendCounter) {
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement memberUpdateSql =
                     conn.prepareStatement("UPDATE Member " +
                             "SET delayedReturnBorrowedBooksCounter = ? " +
+                            ",suspendedTimesCounter = ?" +
                             "WHERE memberId=?");
 
-            memberUpdateSql.setInt(1, memberId);
-            memberUpdateSql.setInt(2, delayedReturnNr);
+            memberUpdateSql.setInt(1, delayedReturnNr);
+            memberUpdateSql.setInt(2, suspendCounter);
+            memberUpdateSql.setInt(3, memberId);
+
             memberUpdateSql.executeUpdate();
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
     }
-    @Override
-    public void updateSuspendedCounter(int memberId, int suspendedTimesNr) {
-        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
-            PreparedStatement memberUpdateSql =
-                    conn.prepareStatement("UPDATE Member " +
-                            "SET suspendedTimesCounter = ? " +
-                            "WHERE memberId=?");
-
-            memberUpdateSql.setInt(1, memberId);
-            memberUpdateSql.setInt(2, suspendedTimesNr);
-            memberUpdateSql.executeUpdate();
-
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
 }

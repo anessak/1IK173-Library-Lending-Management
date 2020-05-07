@@ -14,25 +14,22 @@ public class Member {
 
     public Member()
     {}
-    public Member(String ssn,String fName,String lName, MemberRole role)
+    public Member(int mid, String ssn,String fName,String lName, MemberRole role)
     {
+        this.memberId=mid;
         this.ssn=ssn;
         this.firstName=fName;
         this.lastName=lName;
         this.role=role;
+        this.memberStatus=MemberStatus.Active;
         this.dateCreated=LocalDateTime.now();
-        generateMemberId();
     }
-    public Member(int memberid, String ssn,String fName,String lName,MemberRole role, String pwd, LocalDateTime dateCreated)
+    public Member(int memberid, String ssn,String fName,String lName,MemberRole role, MemberStatus status, String pwd, LocalDateTime dateCreated)
     {
-        this(ssn,fName,lName,role);
-        this.memberId=memberid;
+        this(memberid,ssn,fName,lName,role);
         this.password=pwd;
+        this.memberStatus=status;
         this.dateCreated=dateCreated;
-    }
-    private void generateMemberId()
-    {
-
     }
 
     public int getMemberId() {
@@ -63,4 +60,7 @@ public class Member {
         return memberStatus;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
 }

@@ -4,7 +4,7 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="MembershipRolFileAppndr" fileName="MembershipAdminstration/logs/membership.log"
+        <RollingFile name="MembershipRolFileAppndr" fileName="MembershipAdministration/logs/membership.log"
                      filePattern="MembershipAdministration/logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.zip">
             <PatternLayout>
                 <Pattern>%d [%t] %p %c - %m%n</Pattern>

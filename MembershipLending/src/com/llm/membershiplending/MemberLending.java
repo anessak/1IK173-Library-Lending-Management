@@ -22,7 +22,7 @@ public class MemberLending  {
     public int getMemberId() {
         return memberId;
     }
-    public ArrayList<LendingBasketEntity> getBookItemIds() {
+    public ArrayList<LendingBasketEntity> getBookItemsIdWithDate() {
         return this.bookItemIdsWithDate;
     }
 

@@ -27,7 +27,7 @@ class LendingManagerTest {
 
         IMemberLendingStore db = mock(MemberLendingStore.class,withSettings()
                 .useConstructor("databas").defaultAnswer(Answers.RETURNS_MOCKS));
-        LendingManager mgr= new LendingManager(db,logger);
+        LendingManager mgr= new LendingManager(db,logger,null);
 
         var member=new Member(1000,0,0,6);
         ArrayList<LendingBasketEntity> lbe= new ArrayList<>();
@@ -43,10 +43,10 @@ class LendingManagerTest {
         var searchResult=mgr.searchMemberBorrowedItems(member.getMemberId());
 
         assertEquals(ml.getMemberId(),searchResult.getMemberId() );
-        assertEquals(ml.getBookItemIds().size(),searchResult.getBookItemIds().size() );
-        assertEquals(ml.getBookItemIds().get(0).getBookItemId()
-                ,searchResult.getBookItemIds().get(0).getBookItemId());
-        assertEquals(ml.getBookItemIds().get(0).getLendingDate()
-                ,searchResult.getBookItemIds().get(0).getLendingDate());
+        assertEquals(ml.getBookItemsIdWithDate().size(),searchResult.getBookItemsIdWithDate().size() );
+        assertEquals(ml.getBookItemsIdWithDate().get(0).getBookItemId()
+                ,searchResult.getBookItemsIdWithDate().get(0).getBookItemId());
+        assertEquals(ml.getBookItemsIdWithDate().get(0).getLendingDate()
+                ,searchResult.getBookItemsIdWithDate().get(0).getLendingDate());
     }
 }

@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,16 +44,16 @@ public class BookStore implements IBookStore {
             createDbStatement.execute(sqlBookItems);
 
             createDbStatement.closeOnCompletion();
-
+            conn.commit();
             logger.info("Book database succesfully created");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage());
         }
     }
     public void insertNewBookTitle(BookTitle bokTitle) {
 
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+            conn.setAutoCommit(false);
             PreparedStatement bookTitleInsertSql =
                     conn.prepareStatement("INSERT INTO BookTitles(isbn, title, author, releasedate) VALUES(?,?,?,?)");
             bookTitleInsertSql.setString(1, bokTitle.getIsbn());
@@ -71,14 +72,15 @@ public class BookStore implements IBookStore {
                 bookItemInsertSql.setString(5,bokTitle.getIsbn());
                 bookItemInsertSql.executeUpdate();
             }
-
+            conn.commit();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
     public void insertNewBookItem(BookItem bookItem, String bookIsbn) {
 
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+            conn.setAutoCommit(false);
             PreparedStatement bookItemInsertSql =
                     conn.prepareStatement("INSERT INTO BookItems(id, itemtype, dateadded, itemstate, bookisbn) VALUES(?,?,?,?,?)");
             bookItemInsertSql.setString(1, bookItem.getId().toString());
@@ -88,13 +90,14 @@ public class BookStore implements IBookStore {
             bookItemInsertSql.setString(5, bookIsbn);
             bookItemInsertSql.executeUpdate();
 
+            conn.commit();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
     public BookTitle getBookTitle(String isbn){
 
-        BookTitle bookTitle=new BookTitle();
+        BookTitle bookTitle=null;
         ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             //PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
@@ -111,20 +114,73 @@ public class BookStore implements IBookStore {
                         LocalDateTime.parse(result.getString("releasedate")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return bookTitle;
     }
-    public BookTitle getBookTitleWithItems(String isbn){
+    @Override
+    public BookItem getBookItem(UUID bookItemId){
 
-        BookTitle bookTitle=new BookTitle();
+        BookItem book = null;
         ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
-            //PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
-            //pstmt.setString(1,isbn);
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT * FROM BookItems WHERE id= ?");
+            pstmt.setString(1, bookItemId.toString());
+
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                book= new BookItem(UUID.fromString(result.getString("id")),
+                        ItemType.valueOf(result.getString("itemtype")),
+                        BookItemState.valueOf(result.getString("itemstate")),
+                        LocalDateTime.parse(result.getString("dateadded")),null);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return book;
+    }
+    @Override
+    public ArrayList<BookTitle> searchBooksByIsbn(String isbn){
+        ArrayList<BookTitle> bookTitles=new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
             PreparedStatement pstmt = conn.prepareStatement(
                     "SELECT * FROM BookTitles WHERE UPPER(isbn) LIKE ?");
             pstmt.setString(1, isbn.toUpperCase() + "%");
+            ResultSet bookResult = pstmt.executeQuery();
+            while (bookResult.next()) {
+                bookTitles.add(new BookTitle(bookResult.getString("isbn"),
+                        bookResult.getString("title"),
+                        bookResult.getString("author"),
+                        LocalDateTime.parse(bookResult.getString("releasedate"))));
+            }
+            for (BookTitle t:bookTitles) {
+                PreparedStatement itemsStm  = conn.prepareStatement("SELECT * FROM BookItems WHERE bookisbn = ?");
+                itemsStm.setString(1,t.getIsbn());
+                ResultSet bookItemsResult = itemsStm.executeQuery();
+                while (bookItemsResult.next()) {
+                    t.addBookItem(new BookItem(UUID.fromString(bookItemsResult.getString("id")),
+                            ItemType.valueOf(bookItemsResult.getString("itemtype")),
+                            BookItemState.valueOf(bookItemsResult.getString("itemstate")),
+                            LocalDateTime.parse(bookItemsResult.getString("dateadded")),t));
+                }
+
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return bookTitles;
+    }
+    public BookTitle getBookTitleWithItems(String isbn){
+
+        BookTitle bookTitle=null;
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT * FROM BookTitles WHERE isbn= ?");
+            pstmt.setString(1, isbn);
             ResultSet bookResult = pstmt.executeQuery();
             while (bookResult.next()) {
                 bookTitle= new BookTitle(bookResult.getString("isbn"),
@@ -132,19 +188,96 @@ public class BookStore implements IBookStore {
                         bookResult.getString("author"),
                         LocalDateTime.parse(bookResult.getString("releasedate")));
             }
-
-            PreparedStatement itemsStm  = conn.prepareStatement("SELECT * FROM BookItems WHERE bookisbn = ?");
-            itemsStm.setString(1,bookTitle.getIsbn());
-            ResultSet bookItemsResult = itemsStm.executeQuery();
-            while (bookItemsResult.next()) {
-                bookTitle.addBookItem(new BookItem(UUID.fromString(bookItemsResult.getString("id")),
-                        ItemType.valueOf(bookItemsResult.getString("itemtype")),
-                        BookItemState.valueOf(bookItemsResult.getString("itemstate")),
-                        LocalDateTime.parse(bookItemsResult.getString("dateadded")),bookTitle));
+            if(bookTitle!=null) {
+                PreparedStatement itemsStm = conn.prepareStatement("SELECT * FROM BookItems WHERE bookisbn = ?");
+                itemsStm.setString(1, bookTitle.getIsbn());
+                ResultSet bookItemsResult = itemsStm.executeQuery();
+                while (bookItemsResult.next()) {
+                    bookTitle.addBookItem(new BookItem(UUID.fromString(bookItemsResult.getString("id")),
+                            ItemType.valueOf(bookItemsResult.getString("itemtype")),
+                            BookItemState.valueOf(bookItemsResult.getString("itemstate")),
+                            LocalDateTime.parse(bookItemsResult.getString("dateadded")), bookTitle));
+                }
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return bookTitle;
+    }
+    @Override
+    public void updateBookState(UUID bookItemId, BookItemState itemState){
+
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE BookItems SET itemstate = ? WHERE id = ?");
+            pstmt.setString(1, itemState.name());
+            pstmt.setString(2, bookItemId.toString());
+            pstmt.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteBook(String isbn) {
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt1 = conn.prepareStatement(
+                    "DELETE FROM BookItems WHERE bookisbn = ?");
+            pstmt1.setString(1, isbn);
+            pstmt1.executeUpdate();
+            PreparedStatement pstmt2 = conn.prepareStatement(
+                    "DELETE FROM BookTitles WHERE isbn = ?");
+            pstmt2.setString(1, isbn);
+            pstmt2.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteBookItem(UUID itemId) {
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt1 = conn.prepareStatement(
+                    "DELETE FROM BookItems WHERE id = ?");
+            pstmt1.setString(1, itemId.toString());
+            pstmt1.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public BookTitle getBookTitleByItem(UUID bookItemId) {
+
+        BookTitle bookTitle=null;
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT BookTitles.*, BookItems.* FROM BookTitles " +
+                            "INNER JOIN BookItems ON BookTitles.isbn=BookItems.bookisbn " +
+                            "WHERE BookItems.id= ?");
+            pstmt.setString(1, bookItemId.toString());
+            ResultSet bookResult = pstmt.executeQuery();
+            while (bookResult.next()) {
+                bookTitle= new BookTitle(bookResult.getString("isbn"),
+                        bookResult.getString("title"),
+                        bookResult.getString("author"),
+                        LocalDateTime.parse(bookResult.getString("releasedate")));
+                bookTitle.addBookItem(new BookItem(UUID.fromString(bookResult.getString("id"))
+                        ,ItemType.valueOf(bookResult.getString("itemtype"))));
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
         return bookTitle;
     }

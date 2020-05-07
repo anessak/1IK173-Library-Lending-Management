@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface IMemberLendingStore {
     void addNewLendingBasketForMember(MemberLending memberLending);
 
-    void removeBookItemFromLending(ReturnLendBasket returnItems);
+    int removeBookItemFromLending(ReturnLendBasket returnItems);
 
     MemberLending getMemberBorrowedBookItems(int memberId);
 
@@ -13,7 +13,8 @@ public interface IMemberLendingStore {
 
     void addNewMember(Member member);
 
-    void updateDelayedReturnCounter(int memberId, int delayedReturnNr);
+    void updateMemberCounters(int memberId, int delayedReturnNr,int suspendedTimesNr);
 
-    void updateSuspendedCounter(int memberId, int suspendedTimesNr);
+
+
 }
