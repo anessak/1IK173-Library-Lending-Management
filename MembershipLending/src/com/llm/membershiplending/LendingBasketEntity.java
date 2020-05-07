@@ -1,7 +1,6 @@
 package com.llm.membershiplending;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class LendingBasketEntity implements Comparable<LendingBasketEntity>  {

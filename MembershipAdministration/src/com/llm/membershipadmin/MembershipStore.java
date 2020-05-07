@@ -5,9 +5,7 @@ import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class MembershipStore implements IMembershipStore {
     private Logger logger;
@@ -19,9 +17,6 @@ public class MembershipStore implements IMembershipStore {
 
         this.connectionString="jdbc:sqlite:MembershipAdministration/resources/MembersDB.db";
         this.createDatabaseAndTables();
-    }
-    public MembershipStore(String connStr) {
-        this.connectionString=connStr;
     }
 
     private void createDatabaseAndTables() {
@@ -42,7 +37,7 @@ public class MembershipStore implements IMembershipStore {
                     "lastname text, role text, datedeleted);";
 
             createDbStatement.execute(sqlMember);
-            createDbStatement.execute(sqlMember);
+            createDbStatement.execute(sqlDeletedMember);
 
             createDbStatement.closeOnCompletion();
 
@@ -68,20 +63,6 @@ public class MembershipStore implements IMembershipStore {
             memberInsertSql.setString(8, member.getDateCreated().toString());
             memberInsertSql.executeUpdate();
 
-
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
-    @Override
-    public void updateMemberRole(int memberId, MemberRole role) {
-
-        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
-            PreparedStatement sql =
-                    conn.prepareStatement("UPDATE Members SET role = ? WHERE memberid = ?");
-            sql.setString(1, role.name());
-            sql.setInt(2, memberId);
-            sql.executeUpdate();
 
         } catch (SQLException e) {
             logger.error(e.getMessage());

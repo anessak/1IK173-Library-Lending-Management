@@ -12,8 +12,6 @@ public class Member {
     private MemberRole role;
     private LocalDateTime dateCreated;
 
-    public Member()
-    {}
     public Member(int mid, String ssn,String fName,String lName, MemberRole role)
     {
         this.memberId=mid;

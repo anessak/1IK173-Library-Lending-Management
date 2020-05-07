@@ -10,8 +10,6 @@ public interface IBookStore {
 
     ArrayList<BookTitle> searchBooksByIsbn(String isbn);
 
-    BookTitle getBookTitle(String isbn);
-
     BookTitle getBookTitleWithItems(String isbn);
 
     BookItem getBookItem(UUID bookItemId);

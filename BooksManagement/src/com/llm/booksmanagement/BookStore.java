@@ -1,15 +1,11 @@
 package com.llm.booksmanagement;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 public class BookStore implements IBookStore {
@@ -22,9 +18,6 @@ public class BookStore implements IBookStore {
 
         this.connectionString="jdbc:sqlite:BooksManagement/resources/BooksDB.db";
         this.createDatabaseAndTables();
-    }
-    public BookStore(String connStr) {
-        this.connectionString=connStr;
     }
 
     private void createDatabaseAndTables() {
@@ -98,7 +91,6 @@ public class BookStore implements IBookStore {
     public BookTitle getBookTitle(String isbn){
 
         BookTitle bookTitle=null;
-        ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             //PreparedStatement pstmt  = conn.prepareStatement("SELECT * FROM BookTitles WHERE isbn = ?");
             //pstmt.setString(1,isbn);
@@ -122,7 +114,6 @@ public class BookStore implements IBookStore {
     public BookItem getBookItem(UUID bookItemId){
 
         BookItem book = null;
-        ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
 
             PreparedStatement pstmt = conn.prepareStatement(
@@ -176,7 +167,6 @@ public class BookStore implements IBookStore {
     public BookTitle getBookTitleWithItems(String isbn){
 
         BookTitle bookTitle=null;
-        ZoneId defaultZoneId = ZoneId.systemDefault();
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             PreparedStatement pstmt = conn.prepareStatement(
                     "SELECT * FROM BookTitles WHERE isbn= ?");

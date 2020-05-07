@@ -501,7 +501,7 @@ public class Main {
 
         Logger logger2 = LogManager.getLogger("BooksRolFileAppndr");
         IBookStore db2=new BookStore(logger2);
-        bokRegister = new BookManagementManager(db2,logger2,EventBus.getDefault());
+        bokRegister = new BookManagementManager(db2,logger2);
 
     //    addBooks();
       //  addMember(mgr);
@@ -570,7 +570,7 @@ public class Main {
                 LocalDateTime.of(2019, Month.OCTOBER, 20, 6, 30)));
         liu6.add(new LendingBasketEntity(2000, randomUUID2,
                 LocalDateTime.of(2019, Month.OCTOBER, 20, 6, 30)));
-        var li6=new MemberLending(1000,liu3);
+        var li6=new MemberLending(1000,liu6);
 
         //mgr.lendBookItems(li1);
         mgr.lendBookItems(li2);

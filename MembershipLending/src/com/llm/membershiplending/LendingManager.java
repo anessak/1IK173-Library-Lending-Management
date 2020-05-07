@@ -3,7 +3,6 @@ package com.llm.membershiplending;
 import com.librarylendingmanagement.infrastructure.events.OnBookItemLended;
 import com.librarylendingmanagement.infrastructure.events.OnBookItemReturned;
 import com.librarylendingmanagement.infrastructure.events.OnMemberCreated;
-import com.librarylendingmanagement.infrastructure.events.OnNewBookItemAdded;
 import org.apache.logging.log4j.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,7 +77,7 @@ public class LendingManager {
 
         return "OK";
     }
-
+    @SuppressWarnings("unused")
     @Subscribe
     public void memberCreatedHandler(OnMemberCreated memberCreated){
 

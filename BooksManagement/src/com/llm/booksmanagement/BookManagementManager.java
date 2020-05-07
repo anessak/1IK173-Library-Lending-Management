@@ -2,7 +2,6 @@ package com.llm.booksmanagement;
 
 import com.librarylendingmanagement.infrastructure.events.*;
 import org.apache.logging.log4j.Logger;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -13,13 +12,11 @@ public class BookManagementManager {
     //use cases for book
     IBookStore bookStore;
     private Logger logger;
-    private EventBus Bus;
-    public BookManagementManager(IBookStore bokStore, Logger logger, EventBus b){
+
+    public BookManagementManager(IBookStore bokStore, Logger logger){
 
         this.bookStore=bokStore;
         this.logger =logger;
-        this.Bus=b;
-        this.Bus.register(this);
 
         logger.info("Finished constructor of BookManagementManager");
     }
@@ -92,6 +89,7 @@ public class BookManagementManager {
         if(bok!=null)
             this.bookStore.deleteBookItem(bookItem.getId());
     }
+    @SuppressWarnings("unused")
     @Subscribe
     public void bokItemHasBeenReturned(OnBookItemReturned bookItemId) throws Exception {
         //find bookItem via bookItemId from database
@@ -108,6 +106,7 @@ public class BookManagementManager {
 
 
     }
+    @SuppressWarnings("unused")
     @Subscribe
     public void bokItemHasBeenBorrowed(OnBookItemLended bookItemId) throws Exception {
         //find bookItem via bookItemId from database

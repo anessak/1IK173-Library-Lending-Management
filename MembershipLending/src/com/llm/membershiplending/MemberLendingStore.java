@@ -6,9 +6,6 @@ import org.sqlite.SQLiteConfig;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 public class MemberLendingStore implements IMemberLendingStore {
     private Logger logger;
@@ -20,10 +17,6 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         this.connectionString="jdbc:sqlite:MembershipLending/resources/MemberShipLendingDB.db";
         this.createDatabaseAndTables();
-    }
-    public MemberLendingStore(String connStr) {
-
-        this.connectionString=connStr;
     }
 
     private void createDatabaseAndTables() {

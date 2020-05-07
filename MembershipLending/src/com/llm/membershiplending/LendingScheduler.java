@@ -7,14 +7,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class LendingScheduler {
-    private final ScheduledExecutorService scheduler =
-            Executors.newScheduledThreadPool(1);
     private static Logger logger;
     private static IMemberLendingStore memberLendingStore;
     static EventBus Bus;

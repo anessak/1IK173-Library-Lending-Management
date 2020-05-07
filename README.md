@@ -37,7 +37,7 @@ Man bör också rita scenarion.
 Förslag till moduler i systemet. 
 1. MembershipAdministration hanterar allt kring användare, roller, status på medlem (låst, borttagen ur register) och login...
 1. BookManagement hanterar allt kring böcker, titlar, fysiska böcker, antal tillgängliga...
-1. MembershipLending hanterar medlemmarnas utlåningar, håller reda på när böcker ska lämnas tillbaka, hur många böcker man inte har lämnat tillbaka per medlem, håller reda på när/om man blir reglerad.
+1. MembershipLending hanterar medlemmarnas utlåningar, håller reda på när böcker ska lämnas tillbaka, hur många böcker man inte har lämnat tillbaka per medlem, håller reda på när och om man blir reglerad.
 
 <img src=".documentation/drawiodiagram.svg" width="60%">
 

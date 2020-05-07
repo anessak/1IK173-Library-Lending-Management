@@ -1,7 +1,5 @@
 package com.llm.membershiplending;
 
-import java.util.ArrayList;
-
 public interface IMemberLendingStore {
     void addNewLendingBasketForMember(MemberLending memberLending);
 

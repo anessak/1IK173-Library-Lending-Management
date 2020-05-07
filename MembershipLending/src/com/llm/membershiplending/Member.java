@@ -1,7 +1,5 @@
 package com.llm.membershiplending;
 
-import java.util.ArrayList;
-
 public class Member {
     private int memberId;
     private int delayedReturnBorrowedBooksCounter;

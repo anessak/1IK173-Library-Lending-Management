@@ -13,12 +13,12 @@ public class MembershipManager {
     IMembershipStore membershipStore;
     private Logger logger;
     private EventBus Bus;
-    public MembershipManager(IMembershipStore store, Logger logger, EventBus b){
+    public MembershipManager(IMembershipStore store, Logger log, EventBus b){
+        this.membershipStore=store;
+        this.logger = log;
         this.Bus=b;
         this.Bus.register(this);
 
-        this.membershipStore=store;
-        this.logger =logger;
         logger.info("Finished constructor of MembershipManager");
     }
     public void registerNewLibraryMember(Member member)
@@ -38,6 +38,7 @@ public class MembershipManager {
                 maxNumberOfItems = 10;
 
             membershipStore.insertNewMember(member);
+            logger.info("Add new member");
             this.Bus.post(new OnMemberCreated(member.getMemberId(), maxNumberOfItems));
         }
     }
@@ -62,6 +63,7 @@ public class MembershipManager {
         return (memberId==member.getMemberId() && password.equals(member.getPassword()));
 
     }
+    @SuppressWarnings("unused")
     @Subscribe
     public void suspendRegistrationHandler(OnMemberSuspended memberSuspended){
         //receive message from Lending and then update user status to suspended.
@@ -69,6 +71,7 @@ public class MembershipManager {
         if(member!=null)
             this.membershipStore.changeMemberStatus(memberSuspended.getMemberId(),MemberStatus.Suspended);
     }
+    @SuppressWarnings("unused")
     @Subscribe
     public void removeMemberDueToRegulationBreach(OnMemberBreachedRegulation memberToDelete) {
         //receive message from Lending and then update user status to breach-deleted.

@@ -9,11 +9,6 @@ public class BookItem {
     private LocalDateTime dateAdded;
     private BookItemState itemState;
     private BookTitle referencedBook;
-    public BookItem()
-    {
-        this.id=UUID.randomUUID();
-        this.dateAdded= LocalDateTime.now();
-    }
     public BookItem(UUID id, ItemType type){
         this.id=id;
         this.itemType=type;

@@ -4,8 +4,9 @@ import java.util.UUID;
 
 public class OnNewBookItemAdded {
 
-    private UUID id;
+    private UUID BookItem;
+
     public OnNewBookItemAdded(UUID bookItem) {
-        this.id=bookItem;
+        this.BookItem = bookItem;
     }
 }
