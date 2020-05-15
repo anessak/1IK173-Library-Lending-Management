@@ -33,15 +33,43 @@ public class Main {
 
     public static void main(String[] args) {
         setUp();
-        visaHuvudMenu();
+        if(login())
+            visaHuvudMenu();
     }
+
+    private static boolean login() {
+        System.out.println("-----------");
+        System.out.println("1. Logga in");
+        System.out.println("9. Avsluta");
+        System.out.println("-----------");
+        System.out.print("Gör ditt val -->");
+        var scan = new Scanner(System.in);
+
+        int menuVal=scan.nextInt();
+        if (menuVal != 1)
+            System.exit(0);
+
+
+
+        System.out.println("==============");
+        System.out.println("Användarid:");
+        int memberId = scan.nextInt();
+        scan.nextLine();
+        System.out.println("Lösenord:");
+        String password = scan.nextLine();
+
+        return medlemsRegister.login(memberId, password);
+
+
+    }
+
     private static void visaHuvudMenu() {
         while(true) {
             System.out.println("Library Management System");
-            System.out.println("========");
-            System.out.println("1. Medlem hantering och register");
+            System.out.println("=========================");
+            System.out.println("1. Medlemshantering register");
             System.out.println("2. Bok register");
-            System.out.println("3. Låna böcker");
+            System.out.println("3. Hantering av lån (lån/återlämning/sök)");
             System.out.println("4. Avsluta");
             System.out.print("Gör ditt val -->");
 
@@ -81,23 +109,24 @@ public class Main {
 
     private static void sokTillgangligBok() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("==============");
+        System.out.println("----------------");
         System.out.println("Skriv book isbn:");
         String isbn = scan.nextLine();
 
         var books=bokRegister.searchBookItemsbyIsbnAvailableToBorrow(isbn);
-        System.out.println("==============");
+        System.out.println("------------------");
         if(books.size()==0) {
             System.out.println("Ingen book kunde hittas med detta isbn");
         }
         else {
             System.out.format("Det finns %d tillgängliga exemplar att låna%n",books.size());
             for (BookItem bookItem : books) {
-                System.out.format(" book item id:%s%n Title:%s%n Item Type: %s%n",
+                System.out.format(" book with ISBN:%s%n ITEM_ID:%s%n Title:%s%n Item-Type: %s%n",
+                        bookItem.getReferencedBook().getIsbn(),
                         bookItem.getId().toString(),
                         bookItem.getReferencedBook().getTitle(),
                         bookItem.getItemType().name());
-                System.out.println("-----------");
+                System.out.println("-----------------------------------");
             }
         }
     }
