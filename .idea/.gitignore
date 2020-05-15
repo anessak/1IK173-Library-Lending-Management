@@ -2,3 +2,5 @@
 /shelf/
 /out/
 /workspace.xml
+# Datasource local storage ignored files
+/dataSources.local.xml
