@@ -33,7 +33,7 @@ Man bör också rita scenarion.
 ## Use Case Diagram
 <img src=".documentation/UseCaseDiagram.svg" width="75%">
 
-## Modules
+## Moduler
 Förslag till moduler i systemet. 
 1. MembershipAdministration hanterar allt kring användare, roller, status på medlem (låst, borttagen ur register) och login...
 1. BookManagement hanterar allt kring böcker, titlar, fysiska böcker, antal tillgängliga...
@@ -42,15 +42,15 @@ Förslag till moduler i systemet.
 <img src=".documentation/drawiodiagram.svg" width="60%">
 
 ## Class Diagrams
-### BookManagement module
+### BookManagement modul
 Man bör beskriva vad olika metoder gör...
 
 <img src=".documentation/booksmanagement.svg">
 
-### MembershipAdministration module
+### MembershipAdministration modul
 Man bör beskriva vad olika metoder gör...
 <img src=".documentation/membershipadmin.svg">
 
-### MembershipLending module
+### MembershipLending modul
 Man bör beskriva vad olika metoder gör...
 <img src=".documentation/membershiplending.svg">
