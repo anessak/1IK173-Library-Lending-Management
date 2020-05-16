@@ -443,18 +443,16 @@ public class Main {
                             bookItem.getLendingDate().toLocalDate().plusDays(15).toString());
                 }
             }
-            if(medlems!=null) {
-                for (Member medlem : medlems) {
-                    System.out.format("SSN:        %s%n" +
-                                    "Namn:       %s%n" +
-                                    "Role:       %s%n" +
-                                    "Status:     %s%n",
-                            medlem.getSsn(),
-                            medlem.getFirstName() + " " +
-                                    medlem.getLastName(),
-                            medlem.getRole().name(),
-                            medlem.getMemberStatus().name());
-                }
+            for (Member medlem : medlems) {
+                System.out.format("SSN:        %s%n" +
+                                "Namn:       %s%n" +
+                                "Role:       %s%n" +
+                                "Status:     %s%n",
+                        medlem.getSsn(),
+                        medlem.getFirstName() + " " +
+                                medlem.getLastName(),
+                        medlem.getRole().name(),
+                        medlem.getMemberStatus().name());
             }
             if(medlemsSocialaKontrakt!=null) {
                 System.out.format("Antal Utlånade Böcker: %d%n" +

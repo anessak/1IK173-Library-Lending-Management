@@ -44,7 +44,6 @@ public class MembershipManager {
             case Postgraduate -> 5;
             case PhD -> 7;
             case Teacher -> 10;
-            default -> 0;
         };
 
         logger.info("Add new member to database ID:{} Name:{} {} ", member.getMemberId(),member.getFirstName(),member.getLastName());
@@ -65,7 +64,7 @@ public class MembershipManager {
 
         var member=this.membershipStore.getMember(updateMember.getMemberId());
         if(member==null){
-            logger.error("Unable to find member with id:{}", member.getMemberId());
+            logger.error("Unable to find member with id:{}", updateMember.getMemberId());
             return MemberShipResultMessage.Conflict;
         }
         this.membershipStore.updateMember(updateMember);
