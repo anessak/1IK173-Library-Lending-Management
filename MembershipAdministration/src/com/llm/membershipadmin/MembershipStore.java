@@ -33,8 +33,9 @@ public class MembershipStore implements IMembershipStore {
                     "datecreated text, datesuspended);";
 
             String sqlDeletedMember = "CREATE TABLE IF NOT EXISTS DeletedMembers " +
-                    "(memberid integer PRIMARY KEY, ssn text NOT NULL, firstname text, " +
-                    "lastname text, role text, datedeleted);";
+                    "(memberid integer, ssn text NOT NULL, firstname text, " +
+                    "lastname text, role text, datedeleted,  " +
+                    "PRIMARY KEY (memberid,datedeleted));";
 
             createDbStatement.execute(sqlMember);
             createDbStatement.execute(sqlDeletedMember);
@@ -115,7 +116,7 @@ public class MembershipStore implements IMembershipStore {
 
             PreparedStatement sql =
                     conn.prepareStatement(
-                            "INSERT INTO Members(memberid, ssn, firstname, lastname, role," +
+                            "INSERT INTO DeletedMembers(memberid, ssn, firstname, lastname, role," +
                             "datedeleted) VALUES(?,?,?,?,?,?)");
             sql.setInt(1, memberToDelete.getMemberId());
             sql.setString(2, memberToDelete.getSsn());
@@ -123,18 +124,20 @@ public class MembershipStore implements IMembershipStore {
             sql.setString(4, memberToDelete.getLastName());
             sql.setString(5, memberToDelete.getRole().name());
             sql.setString(6, LocalDateTime.now().toString());
+
+            pstmt.executeUpdate();
             sql.executeUpdate();
 
             conn.commit();
             }
         catch (SQLException throwables) {
             logger.error(throwables.getMessage());
+            throwables.printStackTrace();
         }
     }
     @Override
     public void updateMember(Member memberToUpdate){
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
-            conn.setAutoCommit(false);
 
             PreparedStatement sql  = conn.prepareStatement(
                     "UPDATE Members SET ssn = ?, firstname = ?, " +
@@ -149,10 +152,10 @@ public class MembershipStore implements IMembershipStore {
 
             sql.executeUpdate();
 
-            conn.commit();
         }
         catch (SQLException throwables) {
             logger.error(throwables.getMessage());
+            throwables.printStackTrace();
         }
     }
 

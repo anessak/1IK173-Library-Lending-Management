@@ -6,7 +6,6 @@ import com.librarylendingmanagement.infrastructure.events.OnMemberSuspended;
 import org.apache.logging.log4j.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 
 public class MembershipManager {
@@ -41,6 +40,7 @@ public class MembershipManager {
 
         membershipStore.insertNewMember(member);
         logger.info("Add new member id:{} Name:{} {} ", member.getMemberId(),member.getFirstName(),member.getLastName());
+        //this.Bus.post(new OnMemberCreated(member.getMemberId(), maxNumberOfItems));
         this.Bus.post(new OnMemberCreated(member.getMemberId(), maxNumberOfItems));
 
         logger.info("Succesfully added new member id:{} Name:{} {} ", member.getMemberId(),member.getFirstName(),member.getLastName());

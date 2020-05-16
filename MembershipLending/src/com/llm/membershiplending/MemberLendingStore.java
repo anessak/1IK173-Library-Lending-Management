@@ -152,11 +152,12 @@ public class MemberLendingStore implements IMemberLendingStore {
             getMemberSql.setInt(1, memberId);
 
             ResultSet result = getMemberSql.executeQuery();
-            member = new Member(result.getInt("memberId"),
-                    result.getInt("delayedReturnBorrowedBooksCounter"),
-                    result.getInt("suspendedTimesCounter"),
-                    result.getInt("maximumNumberOfItemsOneCanBorrow"));
-        
+            while (result.next()) {
+                member = new Member(result.getInt("memberId"),
+                        result.getInt("delayedReturnBorrowedBooksCounter"),
+                        result.getInt("suspendedTimesCounter"),
+                        result.getInt("maximumNumberOfItemsOneCanBorrow"));
+            }
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
@@ -198,6 +199,24 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+        }
+    }
+    @Override
+    public int deleteMember(int memberId) {
+        Member member = null;
+        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+
+            PreparedStatement deleteMemberSql =
+                    conn.prepareStatement("DELETE FROM Member WHERE memberid = ?");
+            deleteMemberSql.setInt(1, memberId);
+
+            deleteMemberSql.executeUpdate();
+            return 0;
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
 }

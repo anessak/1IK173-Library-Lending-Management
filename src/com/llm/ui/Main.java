@@ -343,7 +343,7 @@ public class Main {
         else{
             System.out.print("book item id:");
             UUID bookitemid = UUID.fromString(scan.nextLine());
-            bokRegister.removeBookItemFromRegistry(new BookItem(bookitemid,ItemType.Paper),isbn);
+            bokRegister.removeBookItemFromRegistry(bookitemid);
         }
         visaMenuForBocker();
     }
@@ -568,7 +568,9 @@ public class Main {
     public static void addMember(MembershipManager mgr)
     {
         mgr.registerNewLibraryMember(new Member(1000,"19990404",
-                "Anessa","Kurtagic",MemberRole.Undergraduate,MemberStatus.Active, "lösenord",LocalDateTime.now()));
+                "Anessa","Kurtagic",
+                MemberRole.Undergraduate,MemberStatus.Active,
+                "lösenord",LocalDateTime.now()));
 
     }
     public static void addMemberLendings(LendingManager mgr) {

@@ -20,5 +20,9 @@ public interface IBookStore {
 
     void deleteBookItem(UUID itemId);
 
+    void updateBookTitle(BookTitle bookTitle);
+
+    void updateBookItem(UUID bookIsbn, BookItem bookItem);
+
     BookTitle getBookTitleByItem(UUID bookItemId);
 }

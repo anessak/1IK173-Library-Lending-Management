@@ -21,7 +21,6 @@ class LendingManagerTest {
         LendingManager mgr= new LendingManager(db,logger,bus);
         LendingScheduler.Init(db,logger,bus);
 
-
         var member=new Member(1000,0,0,6);
         ArrayList<LendingBasketEntity> lbe= new ArrayList<>();
         lbe.add(new LendingBasketEntity(200, UUID.randomUUID(),
