@@ -47,6 +47,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             logger.info("Member database succesfully created");
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -68,6 +69,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -93,6 +95,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
             return -1;
         }
         return 0;
@@ -136,6 +139,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return memberBorrowedItems;
         //return  memberBorrowedItems.stream().sorted(Comparator.comparing(MemberLending::getLendingDate))
@@ -160,6 +164,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return member;
     }
@@ -180,6 +185,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -199,6 +205,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override

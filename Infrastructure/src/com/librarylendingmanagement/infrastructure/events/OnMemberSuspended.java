@@ -5,5 +5,9 @@ public class OnMemberSuspended {
     public int getMemberId() {
         return memberId;
     }
+    public OnMemberSuspended(int memberid)
+    {
+        this.memberId=memberid;
+    }
 
 }

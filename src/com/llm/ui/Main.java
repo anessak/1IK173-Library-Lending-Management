@@ -558,7 +558,7 @@ public class Main {
 
         Logger logger2 = LogManager.getLogger("BooksRolFileAppndr");
         IBookStore db2=new BookStore(logger2);
-        bokRegister = new BookManagementManager(db2,logger2);
+        bokRegister = new BookManagementManager(db2,logger2,eventBus);
 
     //    addBooks();
       //  addMember(mgr);

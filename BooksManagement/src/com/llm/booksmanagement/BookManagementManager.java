@@ -2,7 +2,10 @@ package com.llm.booksmanagement;
 
 import com.librarylendingmanagement.infrastructure.events.*;
 import org.apache.logging.log4j.Logger;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -12,10 +15,11 @@ public class BookManagementManager {
     IBookStore bookStore;
     private Logger logger;
 
-    public BookManagementManager(IBookStore bokStore, Logger logger){
+    public BookManagementManager(IBookStore bokStore, Logger logger, EventBus bus){
 
         this.bookStore=bokStore;
         this.logger =logger;
+        bus.register(this);
 
         logger.info("Finished constructor of BookManagementManager");
     }
@@ -152,7 +156,7 @@ public class BookManagementManager {
         return this.bookStore.getBookTitleByItem(bookItemId);
     }
     @SuppressWarnings("unused")
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void bokItemHasBeenReturned(OnBookItemReturned bookItemId) throws Exception {
         //find bookItem via bookItemId from database
         logger.info("Searching för book item with id: {}",bookItemId.getId());
@@ -166,10 +170,9 @@ public class BookManagementManager {
         //Update found bookItem by updating bookItem state to HomeInLibrary
         this.bookStore.updateBookState(bookItemId.getId(), BookItemState.HomeInLibrary);
 
-
     }
     @SuppressWarnings("unused")
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void bokItemHasBeenBorrowed(OnBookItemLended bookItemId) throws Exception {
         //find bookItem via bookItemId from database
         logger.info("Searching för book item with id: {}",bookItemId.getId());
@@ -182,7 +185,6 @@ public class BookManagementManager {
         //Update found bookItem by updating bookItem state to Borrowed
         logger.info("found title now updating bookitem:{} status to '{}'", bookItemId.getId(), BookItemState.BorrowedToMember.name());
         this.bookStore.updateBookState(bookItemId.getId(), BookItemState.BorrowedToMember);
-
     }
 
 }

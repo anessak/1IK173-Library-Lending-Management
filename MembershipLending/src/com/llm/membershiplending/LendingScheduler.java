@@ -1,6 +1,7 @@
 package com.llm.membershiplending;
 
 import com.librarylendingmanagement.infrastructure.events.OnMemberBreachedRegulation;
+import com.librarylendingmanagement.infrastructure.events.OnMemberSuspended;
 import org.apache.logging.log4j.Logger;
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,15 +32,15 @@ public class LendingScheduler {
     public static void BookItemLendingTimeHasExpired(int memberId,UUID bookItemId){
         try {
             var memberLendings = memberLendingStore.getMemberBorrowedBookItems(memberId);
-            boolean foundLendedItem=false;
-            for(LendingBasketEntity lendingBookItemId:memberLendings.getBookItemsIdWithDate()){
-                if(lendingBookItemId.getBookItemId().equals(bookItemId) && lendingBookItemId.getMemberId()==memberId)
-                {
-                    foundLendedItem=true;
-                    break;
-                }
-            }
-            if (foundLendedItem) {
+            var matchFound=memberLendings.getBookItemsIdWithDate()
+                    .stream()
+                    .filter(lendingBookItemId->
+                            (lendingBookItemId.getBookItemId().equals(bookItemId)
+                                    && lendingBookItemId.getMemberId()==memberId))
+                    .findAny()
+                    .orElse(null);
+
+            if (matchFound!=null) {
                 var member = memberLendingStore.getMember(memberId);
                 if (member != null) {
                     member.setMembersLendings(memberLendings);
@@ -48,15 +49,18 @@ public class LendingScheduler {
                             member.getDelayedReturnBorrowedBooksCounter(),
                             member.getSuspendedTimesCounter());
 
+                    logger.info("Scheduler memberId:{}, delays:{}, suspend:{}",memberId,member.getDelayedReturnBorrowedBooksCounter(),member.getSuspendedTimesCounter());
+                    if(member.getDelayedReturnBorrowedBooksCounter()>=2 && member.getDelayedReturnBorrowedBooksCounter()%2==0)
+                        Bus.post(new OnMemberSuspended(member.getMemberId()));
                     if (member.getSuspendedTimesCounter() >= 2)
                         Bus.post(new OnMemberBreachedRegulation(member.getMemberId()));
                 }
             }
             else
                 logger.info("Member {} has returned bookItem in time {}", memberId, bookItemId);
-        }catch (Exception e)
-        {
+        }catch (Exception e) {
          logger.error(e.getMessage());
+         e.printStackTrace();
         }
     }
 }

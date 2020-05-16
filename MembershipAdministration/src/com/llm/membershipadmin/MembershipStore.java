@@ -48,7 +48,7 @@ public class MembershipStore implements IMembershipStore {
         }
     }
     @Override
-    public void insertNewMember(Member member) {
+    public int insertNewMember(Member member) {
 
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement memberInsertSql =
@@ -67,19 +67,40 @@ public class MembershipStore implements IMembershipStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
+        return 0;
     }
     @Override
-    public void changeMemberStatus(int memberId, MemberStatus status){
+    public void suspendUser(int memberId){
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement sql =
-                    conn.prepareStatement("UPDATE Members SET status = ? WHERE memberid = ?");
-            sql.setInt(1, memberId);
-            sql.setString(2, status.name());
+                    conn.prepareStatement("UPDATE Members SET status = ?, datesuspended = ?" +
+                            " WHERE memberid = ?");
+            sql.setString(1, MemberStatus.Suspended.name());
+            sql.setString(2, LocalDateTime.now().toString());
+            sql.setInt(3, memberId);
             sql.executeUpdate();
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void reActivateUser(int memberId){
+        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+            PreparedStatement sql =
+                    conn.prepareStatement("UPDATE Members SET status = ?, datesuspended = ? WHERE memberid = ?");
+            sql.setString(1, MemberStatus.Suspended.name());
+            sql.setString(2, "");
+            sql.setInt(3, memberId);
+            sql.executeUpdate();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override

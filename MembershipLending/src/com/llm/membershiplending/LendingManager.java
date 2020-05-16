@@ -70,9 +70,10 @@ public class LendingManager {
             logger.error("Member with id {} was not found", lending.getMemberId());
             return LendingResultMessage.Error;
         }
+
         //Check how many bookitems member has already borrowed.
         //return memberid,bookitemId[],dateBorrowed,
-        logger.info("Find how many books member  has borrowed memberId:{}",lending.getMemberId());
+        logger.info("Find how many books member had borrowed memberId:{}",lending.getMemberId());
         var memberLending=this.database.getMemberBorrowedBookItems(lending.getMemberId());
 
         int availableItemsOneCanBorrow=
@@ -86,7 +87,7 @@ public class LendingManager {
             return LendingResultMessage.Conflict;
         }
 
-        logger.info("Create new leding post for memberId:{}",lending.getMemberId());
+        logger.info("Create new lending post for memberId:{}",lending.getMemberId());
         this.database.addNewLendingBasketForMember(lending);
 
         for (LendingBasketEntity lendingBookItem:lending.getBookItemsIdWithDate()) {

@@ -68,6 +68,7 @@ public class BookStore implements IBookStore {
             conn.commit();
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     public void insertNewBookItem(BookItem bookItem, String bookIsbn) {
@@ -86,6 +87,7 @@ public class BookStore implements IBookStore {
             conn.commit();
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     public BookTitle getBookTitle(String isbn){
@@ -107,6 +109,7 @@ public class BookStore implements IBookStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitle;
     }
@@ -129,6 +132,7 @@ public class BookStore implements IBookStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return book;
     }
@@ -161,6 +165,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitles;
     }
@@ -192,6 +197,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitle;
     }
@@ -209,6 +215,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -226,6 +233,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -256,14 +264,17 @@ public class BookStore implements IBookStore {
                     "DELETE FROM BookItems WHERE bookisbn = ?");
             pstmt1.setString(1, isbn);
             pstmt1.executeUpdate();
+
             PreparedStatement pstmt2 = conn.prepareStatement(
                     "DELETE FROM BookTitles WHERE isbn = ?");
             pstmt2.setString(1, isbn);
             pstmt2.executeUpdate();
+
             conn.commit();
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 
