@@ -91,15 +91,21 @@ public class MembershipManager {
 
     }
     public MemberShipResultMessage suspendMember(int memberId){
-        logger.info("Entering method suspendMember with memberid:{}", memberId);
-        var member = this.membershipStore.getMember(memberId);
-        if (member == null) {
-            logger.error("Unable to find memberid:{}", memberId);
-            return MemberShipResultMessage.NotFound;
+        try {
+            logger.info("Entering method suspendMember with memberid:{}", memberId);
+            var member = this.membershipStore.getMember(memberId);
+            if (member == null) {
+                logger.error("Unable to find memberid:{}", memberId);
+                return MemberShipResultMessage.NotFound;
+            }
+            this.membershipStore.changeMemberStatus(memberId, MemberStatus.Suspended);
+            logger.info("Sucesfully suspended member with memberid:{}", memberId);
+            return MemberShipResultMessage.Ok;
         }
-        this.membershipStore.changeMemberStatus(memberId, MemberStatus.Suspended);
-        logger.info("Sucesfully suspended member with memberid:{}", memberId);
-        return MemberShipResultMessage.Ok;
+        catch(Exception ex){
+            logger.error(ex.getMessage());
+            throw ex;
+        }
     }
     @SuppressWarnings("unused")
     @Subscribe
