@@ -7,6 +7,8 @@ import com.llm.membershiplending.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -32,9 +34,11 @@ public class Main {
     private static UUID randomUUID11=UUID.randomUUID();
 
     public static void main(String[] args) {
+        deleteDataFromSqliteDB();
         setUp();
-       if(login())
-            visaHuvudMenu();
+        //if(login())
+        visaHuvudMenu();
+
     }
 
     private static boolean login() {
@@ -89,6 +93,7 @@ public class Main {
     }
     private static void visaMenuForUtlaning() {
         Scanner scan = new Scanner(System.in);
+        System.out.println("--------------------");
         System.out.println("Låna böcker");
         System.out.println("1. Sök tillgänlig bok");
         System.out.println("2. Låna böcker");
@@ -121,7 +126,7 @@ public class Main {
         else {
             System.out.format("Det finns %d tillgängliga exemplar att låna%n",books.size());
             for (BookItem bookItem : books) {
-                System.out.format(" book with ISBN:%s%n ITEM_ID:%s%n Title:%s%n Item-Type: %s%n",
+                System.out.format(" Bok med ISBN: %s%n item ID: %s%n Titel: %s%n Type: %s%n",
                         bookItem.getReferencedBook().getIsbn(),
                         bookItem.getId().toString(),
                         bookItem.getReferencedBook().getTitle(),
@@ -209,12 +214,13 @@ public class Main {
         String isbn = scan.nextLine();
 
         var books=bokRegister.searchBookTitlesbyIsbn(isbn);
-        System.out.println("==============");
+        System.out.println("------------------");
         if(books.size()==0) {
             System.out.println("Ingen book kunde hittas med detta isbn");
         }
         else {
             System.out.println("Sök resultat");
+            System.out.println("------------------");
             for (BookTitle book : books) {
                 System.out.format(" ISBN:%s%n Title:%s%n Authr: %s%n Release date:%s%n Nr of items:%d%n",
                         book.getIsbn(),
@@ -222,12 +228,26 @@ public class Main {
                         book.getAuthor(),
                         book.getReleaseDate().toLocalDate().toString(),
                         book.getAvailableBookItems().size());
+                printBookItem(book.getAvailableBookItems());
             }
         }
+        System.out.println("------------------");
         visaMenuForBocker();
     }
+
+    private static void printBookItem(ArrayList<BookItem> availableBookItems) {
+        for(BookItem item: availableBookItems){
+            System.out.println("---------------------------------------------------");
+            System.out.format("     Item ID:%s%n     Type:%s%n     State:%s%n     Date Added:%s%n",
+                    item.getId().toString(),item.getItemType().name(),item.getItemState().name(),item.getDateAdded().toLocalDate().toString());
+        }
+        System.out.println("-----------------------------------------------");
+    }
+
     private static void registreraNyBok() {
-        System.out.println("***Registrera ny bok***");
+        System.out.println("-----------------");
+        System.out.println("Registrera ny bok");
+        System.out.println("-----------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("book isbn:");
         String isbn = scan.nextLine();
@@ -261,10 +281,13 @@ public class Main {
             System.out.format("Book med samma isbn finns i registret");
             System.out.format("Titel:%s Autor %s%n ", book.getTitle(),book.getAuthor() );
         }
+        System.out.println("------------------");
         visaMenuForBocker();
     }
     private static void registreraNyBokItem(BookTitle bokTitle) {
-        System.out.println("***Registrera ny bok item***");
+        System.out.println("----------------------");
+        System.out.println("Registrera ny bok item");
+        System.out.println("----------------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("Bok-item typ p(aper) (a)udio (v)ideo (ebok) ");
         var val = scan.nextLine();
@@ -281,10 +304,12 @@ public class Main {
         String flerBi = scan.nextLine();
         if (flerBi.equals("j"))
             registreraNyBokItem(bokTitle);
-
+        System.out.println("------------------");
     }
     private static void registreraNyBokItem() {
-        System.out.println("***Registrera ny bok item***");
+        System.out.println("---------------------");
+        System.out.println("Registrera ny bok item");
+        System.out.println("---------------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("Bok titelns isbn:");
         String isbn = scan.nextLine();
@@ -313,9 +338,12 @@ public class Main {
             else
                 bokRegister.addNewBookItemsForBok(bokTitle);
         }
+        System.out.println("---------------------");
     }
     private static void taBortBok() {
-        System.out.println("***Ta bort bok***");
+        System.out.println("---------------------");
+        System.out.println("Ta bort bok");
+        System.out.println("---------------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("book isbn:");
         String isbn = scan.nextLine();
@@ -328,10 +356,13 @@ public class Main {
             bokRegister.removeBookFromRegistry(book);
             System.out.print("Boken borttagen ur registret med alla dessa items");
         }
+        System.out.println("---------------------");
         visaMenuForBocker();
     }
     private static void taBortBokItem() {
-        System.out.println("***Ta bort bok item***");
+        System.out.println("---------------------");
+        System.out.println("Ta bort bok item");
+        System.out.println("---------------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("book isbn:");
         String isbn = scan.nextLine();
@@ -345,17 +376,21 @@ public class Main {
             UUID bookitemid = UUID.fromString(scan.nextLine());
             bokRegister.removeBookItemFromRegistry(bookitemid);
         }
+        System.out.println("---------------------");
         visaMenuForBocker();
     }
 
     private static void visaMedlemskapMenu() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Medlems hantering och register?");
+        System.out.println("-------------------------------");
+        System.out.println("Medlems hantering och register");
+        System.out.println("-------------------------------");
         System.out.println("1. Sök medlem");
         System.out.println("2. Sök medlems utlånade böcker");
         System.out.println("3. Registrera medlem");
         System.out.println("4. Suspendera medlem");
-        System.out.println("5. Ta bort medlem");
+        System.out.println("5. Återaktivera medlem");
+        System.out.println("6. Ta bort medlem");
         System.out.println("0. Huvud Menu");
         System.out.print("==>");
         int valAvOperation = scan.nextInt();
@@ -365,7 +400,8 @@ public class Main {
             case 2 -> sokMedlemUtlaningsinformation();
             case 3 -> registreraMedlem();
             case 4 -> suspenderaMedlem();
-            case 5 -> taBortMedlem();
+            case 5 -> aktiveraMedlem();
+            case 6 -> taBortMedlem();
             default -> visaHuvudMenu();
         }
 
@@ -374,12 +410,13 @@ public class Main {
 
     private static void sokMedlemUtlaningsinformation() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("==============");
+        System.out.println("-----------------");
         System.out.println("Skriv medlems id:");
+        System.out.println("------------------");
         int medlemsId = scan.nextInt();
 
         var medlems=medlemsRegister.searchMembers(medlemsId);
-        System.out.println("==============");
+        System.out.println("----------------------");
         if(medlems.size()==0) {
             System.out.println("Igen medlem kunde hittas med detta id");
         }
@@ -387,60 +424,71 @@ public class Main {
 
             var utlanadeBocker = utlaningsRegister.searchMemberBorrowedItems(medlemsId);
             var medlemsSocialaKontrakt = utlaningsRegister.getMemberAndCurrentBorrowedBookItems(medlemsId);
+
             System.out.println("Sök resultat");
             System.out.println("------------");
-            for (LendingBasketEntity bookItem : utlanadeBocker.getBookItemsIdWithDate()) {
-                var bookTitle = bokRegister.getBookTitleByBookItemId(bookItem.getBookItemId());
-                System.out.format("Utlånad titeln   '%s'%n" +
-                                  "med itemId       '%s'%n"+
-                                  "av typen         '%s'%n" +
-                                  "Utlånad den      '%s' bör lämnas den '%s'%n",
-                        bookTitle.getTitle(),
-                        bookTitle.getAvailableBookItems().get(0).getId(),
-                        bookTitle.getAvailableBookItems().get(0).getItemType().name(),
-                        bookItem.getLendingDate().toLocalDate().toString(),
-                        bookItem.getLendingDate().toLocalDate().plusDays(15).toString());
+            if(utlanadeBocker==null)
+                System.out.format("Medlem med ID %d har inga utlånade böcker%n",medlemsId);
+            else {
+                for (LendingBasketEntity bookItem : utlanadeBocker.getBookItemsIdWithDate()) {
+                    var bookTitle = bokRegister.getBookTitleByBookItemId(bookItem.getBookItemId());
+                    System.out.format("Utlånad titeln   '%s'%n" +
+                                    "med itemId       '%s'%n" +
+                                    "av typen         '%s'%n" +
+                                    "Utlånad den      '%s' bör lämnas den '%s'%n",
+                            bookTitle.getTitle(),
+                            bookTitle.getAvailableBookItems().get(0).getId(),
+                            bookTitle.getAvailableBookItems().get(0).getItemType().name(),
+                            bookItem.getLendingDate().toLocalDate().toString(),
+                            bookItem.getLendingDate().toLocalDate().plusDays(15).toString());
+                }
             }
-            for (Member medlem : medlems) {
-                System.out.format("SSN:        %s%n" +
-                                "Namn:       %s%n" +
-                                "Role:       %s%n" +
-                                "Status:     %s%n",
-                        medlem.getSsn(),
-                        medlem.getFirstName() + " " +
-                                medlem.getLastName(),
-                        medlem.getRole().name(),
-                        medlem.getMemberStatus().name());
+            if(medlems!=null) {
+                for (Member medlem : medlems) {
+                    System.out.format("SSN:        %s%n" +
+                                    "Namn:       %s%n" +
+                                    "Role:       %s%n" +
+                                    "Status:     %s%n",
+                            medlem.getSsn(),
+                            medlem.getFirstName() + " " +
+                                    medlem.getLastName(),
+                            medlem.getRole().name(),
+                            medlem.getMemberStatus().name());
+                }
             }
-            System.out.format("Antal Utlånade Böcker: %d%n" +
-                            "Max möjligautlåningar: %d%n" +
-                            "Antalet Förseningar:   %d%n" +
-                            "Antalet Suspenderingar:%d%n",
-                    medlemsSocialaKontrakt.getMemberLendings().getBookItemsIdWithDate().size(),
-                    medlemsSocialaKontrakt.getMaximumNumberOfItemsOneCanBorrow(),
-                    medlemsSocialaKontrakt.getDelayedReturnBorrowedBooksCounter(),
-                    medlemsSocialaKontrakt.getSuspendedTimesCounter()
-                    );
-            System.out.println("------------------");
+            if(medlemsSocialaKontrakt!=null) {
+                System.out.format("Antal Utlånade Böcker: %d%n" +
+                                "Max möjligautlåningar: %d%n" +
+                                "Antalet Förseningar:   %d%n" +
+                                "Antalet Suspenderingar:%d%n",
+                        medlemsSocialaKontrakt.getMemberLendings().getBookItemsIdWithDate().size(),
+                        medlemsSocialaKontrakt.getMaximumNumberOfItemsOneCanBorrow(),
+                        medlemsSocialaKontrakt.getDelayedReturnBorrowedBooksCounter(),
+                        medlemsSocialaKontrakt.getSuspendedTimesCounter()
+                );
+                System.out.println("------------------");
+            }
         }
         visaMedlemskapMenu();
     }
 
     private static void sokMedlem(){
         Scanner scan = new Scanner(System.in);
-        System.out.println("==============");
+        System.out.println("---------------------");
         System.out.println("Skriv medlems id:");
+        System.out.println("---------------------");
         int medlemsId = scan.nextInt();
 
         var medlems=medlemsRegister.searchMembers(medlemsId);
-        System.out.println("==============");
+        System.out.println("---------------------");
         if(medlems.size()==0) {
             System.out.println("Igen medlem kunde hittas med detta id");
         }
         else {
             System.out.println("Sök resultat");
+            System.out.println("------------");
             for (Member medlem : medlems) {
-                System.out.format("Id:%d%n SSN:%s%n Namn: %s %s%n Role:%s%n Status:%s%n Medlem sedan:%s%n",
+                System.out.format(" Id:%d%n SSN:%s%n Namn: %s %s%n Role:%s%n Status:%s%n Medlem sedan:%s%n",
                         medlem.getMemberId(),
                         medlem.getSsn(),
                         medlem.getFirstName(),
@@ -450,10 +498,13 @@ public class Main {
                         medlem.getDateCreated().toString());
             }
         }
+        System.out.println("---------------------");
         visaMedlemskapMenu();
     }
     private static void registreraMedlem() {
-        System.out.println("***Registrera ny medlem***");
+        System.out.println("---------------------");
+        System.out.println("Registrera ny medlem");
+        System.out.println("---------------------");
         Scanner scan = new Scanner(System.in);
         System.out.print("Medlems id:");
         int medlemsId = scan.nextInt();
@@ -492,11 +543,14 @@ public class Main {
             System.out.format("Namn:%s %s Skapad %s ", medlem.getFirstName(), medlem.getLastName(), medlem.getDateCreated().toLocalDate().toString());
             System.out.println();
         }
+        System.out.println("---------------------");
         visaMedlemskapMenu();
     }
     private static void suspenderaMedlem() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("-----!Suspendering av medlem!-----");
+        System.out.println("----------------------");
+        System.out.println("Suspendering av medlem");
+        System.out.println("----------------------");
         System.out.println("Skriv medlems id:");
         System.out.print("==>");
         int medlemsId = scan.nextInt();
@@ -510,12 +564,36 @@ public class Main {
             System.out.println("Medlem sespenderad!!");
 
         }
+        System.out.println("----------------------");
+        visaMedlemskapMenu();
+    }
+    private static void aktiveraMedlem() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("-----------------------------------");
+        System.out.println("-----Återaktivering av medlem-----");
+        System.out.println("-----------------------------------");
+        System.out.println("Skriv medlems id:");
+        System.out.print("==>");
+        int medlemsId = scan.nextInt();
+        var medlem = medlemsRegister.getMemberById(medlemsId);
+        if (medlem == null) {
+            System.out.println("------------------------");
+            System.out.println("Kunde inte hitta medlem");
+        }
+        else {
+            medlemsRegister.reActiveUser(medlemsId);
+            System.out.println("Medlem återaktiverad!");
+
+        }
+        System.out.println("---------------------");
         visaMedlemskapMenu();
     }
 
     private static void taBortMedlem(){
         Scanner scan = new Scanner(System.in);
-        System.out.println("***Borttagning av medlem***");
+        System.out.println("---------------------");
+        System.out.println("Borttagning av medlem");
+        System.out.println("---------------------");
         System.out.println("Skriv medlems id:");
         System.out.print("==>");
         int medlemsId = scan.nextInt();
@@ -535,6 +613,7 @@ public class Main {
                 System.out.println("Medlem borttagen!!");
             }
         }
+        System.out.println("---------------------");
         visaMedlemskapMenu();
     }
 
@@ -560,15 +639,27 @@ public class Main {
         IBookStore db2=new BookStore(logger2);
         bokRegister = new BookManagementManager(db2,logger2,eventBus);
 
-    //    addBooks();
-      //  addMember(mgr);
+        addBooks();
+        addMembers();
         //addMemberLendings(mgr1);
     }
 
-    public static void addMember(MembershipManager mgr)
+    public static void addMembers()
     {
-        mgr.registerNewLibraryMember(new Member(1000,"19990404",
-                "Anessa","Kurtagic",
+        medlemsRegister.registerNewLibraryMember(new Member(1000,"19550404",
+                "Carl","Gustav",
+                MemberRole.PhD,MemberStatus.Active,
+                "pwd",LocalDateTime.now()));
+        medlemsRegister.registerNewLibraryMember(new Member(2000,"19560115",
+                "Silvia","Renate",
+                MemberRole.Teacher,MemberStatus.Active,
+                "pwd",LocalDateTime.now()));
+        medlemsRegister.registerNewLibraryMember(new Member(3000,"19891030",
+                "Carl","Philip",
+                MemberRole.Postgraduate,MemberStatus.Active,
+                "lösenord",LocalDateTime.now()));
+        medlemsRegister.registerNewLibraryMember(new Member(4000,"19950222",
+                "Sofia","Kristina",
                 MemberRole.Undergraduate,MemberStatus.Active,
                 "lösenord",LocalDateTime.now()));
 
@@ -644,7 +735,7 @@ public class Main {
     public static void addBooks()
     {
         var bookTitleA=new BookTitle("1022-2321-33123",
-                "bästa boken","Anessa Kurtagic",
+                "Vägen till monarki","Mason Lounge SWE",
                 LocalDateTime.of(2015, Month.FEBRUARY, 20, 6, 30));
 
         bookTitleA.addBookItem(new BookItem(randomUUID1, ItemType.Paper));
@@ -653,8 +744,8 @@ public class Main {
         bookTitleA.addBookItem(new BookItem(randomUUID4, ItemType.Audio));
 
         var bookTitleB= new BookTitle("9992-2321-31230",
-                "Äntligen Monarki igen!","Kungen är bäst!",
-                LocalDateTime.of(2020, Month.FEBRUARY, 21, 2, 10));
+                "COVID-19 Största Bluff i Världshitoria","Noblepristagare i Medicin",
+                LocalDateTime.of(2020, Month.MAY, 21, 5, 10));
         bookTitleB.addBookItem(new BookItem(randomUUID5, ItemType.Paper));
         bookTitleB.addBookItem(new BookItem(randomUUID6, ItemType.Paper));
         bookTitleB.addBookItem(new BookItem(randomUUID7, ItemType.Video));
@@ -662,7 +753,27 @@ public class Main {
         bokRegister.addBookTitleToLibrary(bookTitleA);
         bokRegister.addBookTitleToLibrary(bookTitleB);
 
-        var res1=bokRegister.searchBookTitlesbyIsbn("1022-");
-        var res2=bokRegister.searchBookTitlesbyIsbn("9992-2321-31230");
     }
+    public static void deleteDataFromSqliteDB()
+    {
+        var bookDatabase = new File("BooksManagement/resources/BooksDB.db");
+        var memberDatabase = new File("MembershipAdministration/resources/MembersDB.db");
+        var lendingDatabase = new File("MembershipLending/resources/MemberShipLendingDB.db");
+        if (bookDatabase.delete()) {
+            System.out.println("Deleted the file: " + bookDatabase.getName());
+        } else {
+            System.out.println("Failed to delete the file.");
+        }
+        if (memberDatabase.delete()) {
+            System.out.println("Deleted the file: " + memberDatabase.getName());
+        } else {
+            System.out.println("Failed to delete the file.");
+        }
+        if (lendingDatabase.delete()) {
+            System.out.println("Deleted the file: " + lendingDatabase.getName());
+        } else {
+            System.out.println("Failed to delete the file.");
+        }
+    }
+
 }

@@ -93,7 +93,7 @@ public class MembershipStore implements IMembershipStore {
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement sql =
                     conn.prepareStatement("UPDATE Members SET status = ?, datesuspended = ? WHERE memberid = ?");
-            sql.setString(1, MemberStatus.Suspended.name());
+            sql.setString(1, MemberStatus.Active.name());
             sql.setString(2, "");
             sql.setInt(3, memberId);
             sql.executeUpdate();
