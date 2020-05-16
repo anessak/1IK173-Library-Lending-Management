@@ -354,7 +354,8 @@ public class Main {
         System.out.println("1. Sök medlem");
         System.out.println("2. Sök medlems utlånade böcker");
         System.out.println("3. Registrera medlem");
-        System.out.println("4. Ta bort medlem");
+        System.out.println("4. Suspendera medlem");
+        System.out.println("5. Ta bort medlem");
         System.out.println("0. Huvud Menu");
         System.out.print("==>");
         int valAvOperation = scan.nextInt();
@@ -363,11 +364,13 @@ public class Main {
             case 1 -> sokMedlem();
             case 2 -> sokMedlemUtlaningsinformation();
             case 3 -> registreraMedlem();
-            case 4 -> taBortMedlem();
+            case 4 -> suspenderaMedlem();
+            case 5 -> taBortMedlem();
             default -> visaHuvudMenu();
         }
 
     }
+
 
     private static void sokMedlemUtlaningsinformation() {
         Scanner scan = new Scanner(System.in);
@@ -491,6 +494,25 @@ public class Main {
         }
         visaMedlemskapMenu();
     }
+    private static void suspenderaMedlem() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("-----!Suspendering av medlem!-----");
+        System.out.println("Skriv medlems id:");
+        System.out.print("==>");
+        int medlemsId = scan.nextInt();
+        var medlem = medlemsRegister.getMemberById(medlemsId);
+        if (medlem == null) {
+            System.out.println("------------------------");
+            System.out.println("Kunde inte hitta medlem");
+        }
+        else {
+            medlemsRegister.suspendMember(medlemsId);
+            System.out.println("Medlem sespenderad!!");
+
+        }
+        visaMedlemskapMenu();
+    }
+
     private static void taBortMedlem(){
         Scanner scan = new Scanner(System.in);
         System.out.println("***Borttagning av medlem***");
@@ -503,9 +525,15 @@ public class Main {
             System.out.println("Kunde inte hitta medlem");
         }
         else {
-            medlemsRegister.removeMember(medlemsId);
-            System.out.println("Medlem borttagen!!");
-
+            var checkIfMemberHasBorrowedBooks=utlaningsRegister.getMemberAndCurrentBorrowedBookItems(medlemsId);
+            if(checkIfMemberHasBorrowedBooks.getMemberLendings().getBookItemsIdWithDate().size()>0){
+                System.out.println("Medlem har utlånade böcker! Kan ej ta bort medlem!");
+                return;
+            }
+            else {
+                medlemsRegister.removeMember(medlemsId);
+                System.out.println("Medlem borttagen!!");
+            }
         }
         visaMedlemskapMenu();
     }

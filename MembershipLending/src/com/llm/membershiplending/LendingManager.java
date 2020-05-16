@@ -29,12 +29,17 @@ public class LendingManager {
         return member;
     }
     public MemberLending searchMemberBorrowedItems(int memberId){
-        return this.database.getMemberBorrowedBookItems(memberId);
+        var member=this.database.getMember(memberId);
+        if(member!=null) {
+            return this.database.getMemberBorrowedBookItems(memberId);
+        }
+        return null;
     }
-    public void returnBorrowedItem(ReturnLendBasket rlb)  {
+    public int returnBorrowedItem(ReturnLendBasket rlb)  {
         var findMember= this.database.getMember(rlb.getMemberId());
         if(findMember==null) {
             logger.error("Member with id {} was not found", rlb.getMemberId());
+            return -1;
         }
          int result=   this.database.removeBookItemFromLending(rlb);
         if(result!=-1) {
@@ -43,7 +48,9 @@ public class LendingManager {
                 //man ändrar antal bookitems i "lager"
                 this.bus.post(new OnBookItemReturned(bookItem));
             }
+            return 0;
         }
+        else return -1;
     }
     public String lendBookItems(MemberLending lending)  {
 

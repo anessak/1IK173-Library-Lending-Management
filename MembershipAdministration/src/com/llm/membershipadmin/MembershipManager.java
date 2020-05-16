@@ -54,14 +54,17 @@ public class MembershipManager {
             this.membershipStore.deleteMember(member);
 
     }
-    public void cancelMemberShip(int memberId){
 
-    }
     public boolean login(int memberId, String password){
 
         var member = this.membershipStore.getMember(memberId);
         return (memberId==member.getMemberId() && password.equals(member.getPassword()));
 
+    }
+    public void suspendMember(int memberId){
+        var member = this.membershipStore.getMember(memberId);
+        if(member!=null)
+            this.membershipStore.changeMemberStatus(memberId,MemberStatus.Suspended);
     }
     @SuppressWarnings("unused")
     @Subscribe
