@@ -131,6 +131,30 @@ public class MembershipStore implements IMembershipStore {
             logger.error(throwables.getMessage());
         }
     }
+    @Override
+    public void updateMember(Member memberToUpdate){
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+
+            PreparedStatement sql  = conn.prepareStatement(
+                    "UPDATE Members SET ssn = ?, firstname = ?, " +
+                            "lastname = ?, role = ?, status = ?, " +
+                            "password = ? WHERE memberid = ?");
+            sql.setString(1,memberToUpdate.getSsn());
+            sql.setString(2,memberToUpdate.getFirstName());
+            sql.setString(3,memberToUpdate.getLastName());
+            sql.setString(4,memberToUpdate.getRole().name());
+            sql.setString(5,memberToUpdate.getMemberStatus().name());
+            sql.setString(6,memberToUpdate.getPassword());
+
+            sql.executeUpdate();
+
+            conn.commit();
+        }
+        catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+        }
+    }
 
     @Override
     public ArrayList<Member> searchMembers(int memberIdWildCard) {

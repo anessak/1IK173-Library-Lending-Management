@@ -11,5 +11,7 @@ public interface IMembershipStore {
 
     void deleteMember(Member member);
 
+    void updateMember(Member memberToUpdate);
+
     ArrayList<Member> searchMembers(int memberIdWildCard);
 }

@@ -4,11 +4,9 @@ import org.apache.logging.log4j.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
