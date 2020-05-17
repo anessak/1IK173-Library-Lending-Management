@@ -59,13 +59,17 @@ public class MembershipManager {
 
     }
     public MemberShipResultMessage updateMember(Member updateMember){
+        if(updateMember==null){
+            logger.error("updateMember method called with NULL argument");
+            return MemberShipResultMessage.Error;
+        }
         logger.info("Entering method updateMember with memberId:{} Name:{} {} and role:{}",
                 updateMember.getMemberId(), updateMember.getFirstName(), updateMember.getLastName(),updateMember.getRole());
 
         var member=this.membershipStore.getMember(updateMember.getMemberId());
         if(member==null){
             logger.error("Unable to find member with id:{}", updateMember.getMemberId());
-            return MemberShipResultMessage.Conflict;
+            return MemberShipResultMessage.NotFound;
         }
         this.membershipStore.updateMember(updateMember);
 
@@ -90,48 +94,52 @@ public class MembershipManager {
             logger.error("Unable to find member with memberId:{} ", memberId);
             return MemberShipResultMessage.NotFound;
         }
-        this.membershipStore.deleteMember(member);
-        logger.info("Sucesfully deleted member with memberId:{} ", memberId);
-
-        return MemberShipResultMessage.Ok;
+        var result= this.membershipStore.deleteMember(member);
+        if(result==0) {
+            logger.info("Sucesfully deleted member with memberId:{} ", memberId);
+            return MemberShipResultMessage.Ok;
+        }
+        else {
+            logger.info("Error while deleting member with memberId:{} ", memberId);
+            return MemberShipResultMessage.Error;
+        }
 
     }
 
     public boolean login(int memberId, String password){
         logger.info("Entering method login with memberid:{} and password:{}", memberId, password);
         var member = this.membershipStore.getMember(memberId);
+        if(member==null)
+            return false;
 
         return (memberId==member.getMemberId() && password.equals(member.getPassword()));
 
     }
-    public MemberShipResultMessage suspendMember(int memberId){
-        try {
-            logger.info("Entering method suspendMember with memberid:{}", memberId);
-            var member = this.membershipStore.getMember(memberId);
-            if (member == null) {
-                logger.error("Unable to find memberid:{}", memberId);
-                return MemberShipResultMessage.NotFound;
-            }
-            this.membershipStore.suspendUser(memberId);
-            logger.info("Sucesfully suspended member with memberid:{}", memberId);
-            return MemberShipResultMessage.Ok;
+    public MemberShipResultMessage suspendMember(int memberId) {
+        logger.info("Entering method suspendMember with memberid:{}", memberId);
+        var member = this.membershipStore.getMember(memberId);
+        if (member == null) {
+            logger.error("Unable to find memberid:{}", memberId);
+            return MemberShipResultMessage.NotFound;
         }
-        catch(Exception ex){
-            logger.error(ex.getMessage());
-            throw ex;
-        }
+        this.membershipStore.suspendUser(memberId);
+        logger.info("Sucesfully suspended member with memberid:{}", memberId);
+        return MemberShipResultMessage.Ok;
     }
-    public void reActiveUser(int memberId){
+    public MemberShipResultMessage reActiveUser(int memberId){
         logger.info("Entering method reActiveUser with memberid:{}", memberId);
         logger.info("Get member with memberid:{}",memberId);
         var member = this.membershipStore.getMember(memberId);
-        if(member!=null) {
+        if(member==null) {
+            logger.error("not found member->Get member with memberid:{} ", memberId);
+            return MemberShipResultMessage.NotFound;
+        }
+        else {
             logger.info("Member found!");
             this.membershipStore.reActivateUser(memberId);
             logger.info("Member with id:{} Activated!", memberId);
+            return MemberShipResultMessage.Ok;
         }
-        else
-            logger.error("not found member->Get member with memberid:{} ", memberId);
     }
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.ASYNC)

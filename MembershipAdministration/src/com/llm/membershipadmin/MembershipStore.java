@@ -128,7 +128,7 @@ public class MembershipStore implements IMembershipStore {
         return member;
     }
     @Override
-    public void deleteMember(Member memberToDelete){
+    public int deleteMember(Member memberToDelete){
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
             PreparedStatement pstmt  = conn.prepareStatement(
@@ -154,7 +154,9 @@ public class MembershipStore implements IMembershipStore {
         catch (SQLException throwables) {
             logger.error(throwables.getMessage());
             throwables.printStackTrace();
+            return -1;
         }
+        return 0;
     }
     @Override
     public void updateMember(Member memberToUpdate){

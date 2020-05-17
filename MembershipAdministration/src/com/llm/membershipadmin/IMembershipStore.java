@@ -11,7 +11,7 @@ public interface IMembershipStore {
 
     Member getMember(int memberId);
 
-    void deleteMember(Member member);
+    int deleteMember(Member member);
 
     void updateMember(Member memberToUpdate);
 
