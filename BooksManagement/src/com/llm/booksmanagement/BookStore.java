@@ -257,7 +257,7 @@ public class BookStore implements IBookStore {
     }
 
     @Override
-    public void deleteBook(String isbn) {
+    public int deleteBook(String isbn) {
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
             PreparedStatement pstmt1 = conn.prepareStatement(
@@ -271,15 +271,17 @@ public class BookStore implements IBookStore {
             pstmt2.executeUpdate();
 
             conn.commit();
+            return 0;
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
+            return -1;
         }
     }
 
     @Override
-    public void deleteBookItem(UUID itemId) {
+    public int deleteBookItem(UUID itemId) {
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
             PreparedStatement pstmt1 = conn.prepareStatement(
@@ -287,10 +289,12 @@ public class BookStore implements IBookStore {
             pstmt1.setString(1, itemId.toString());
             pstmt1.executeUpdate();
             conn.commit();
+            return 0;
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
+            return -1;
         }
     }
 

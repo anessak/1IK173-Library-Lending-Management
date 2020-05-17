@@ -44,11 +44,15 @@ public class BookManagementManager {
         return ResultMessage.Ok;
     }
     public ResultMessage addNewBookItemsForBok(BookTitle book){
+        if(book==null) {
+            logger.error("Callaed addNewBookItemsForBok with NULL argument");
+            return ResultMessage.Error;
+        }
         logger.info("Searching för bok with isbn: {}", book.getIsbn());
         var bok = this.getBookTitlebyIsbn(book.getIsbn());
-        if (book != null) {
-            logger.info("Unable to add book as same isbn found already in DB isbn:{}", book.getIsbn());
-            return ResultMessage.Conflict;
+        if (bok == null) {
+            logger.info("Unable to find book to add new BookItem for book SIBN:{}", book.getIsbn());
+            return ResultMessage.NotFound;
         }
 
         for (BookItem b : book.getAvailableBookItems()) {
@@ -103,10 +107,11 @@ public class BookManagementManager {
     }
     public ResultMessage removeBookFromRegistry(BookTitle book)
     {
-        logger.info("Entering method removeBookFromRegistry isbn: {}",book.getIsbn());
-        if(book==null)
+        if(book==null) {
+            logger.info("Entering method removeBookFromRegistry with NULL argument");
             return ResultMessage.Error;
-
+        }
+        logger.info("Entering method removeBookFromRegistry isbn: {}",book.getIsbn());
         logger.info("Searching för bok with isbn: {}",book.getIsbn());
         var bok=this.getBookTitlebyIsbn(book.getIsbn());
         if(bok == null) {
@@ -114,12 +119,14 @@ public class BookManagementManager {
             return ResultMessage.NotFound;
         }
         logger.info("Deleting bok with isbn: {}",book.getIsbn());
-        this.bookStore.deleteBook(book.getIsbn());
-        logger.info("Bok with isbn: {} deleted!",book.getIsbn());
-
-        return ResultMessage.Ok;
+        var resultfromDB = this.bookStore.deleteBook(book.getIsbn());
+        if(resultfromDB==0) {
+            logger.info("Bok with isbn: {} deleted!", book.getIsbn());
+            return ResultMessage.Ok;
+        }
+        return ResultMessage.Error;
     }
-    public ResultMessage removeBookFromRegistry(String isbn)
+    public ResultMessage removeBookFromRegistryWithIsbn(String isbn)
     {
         logger.info("Searching för bok with isbn: {}",isbn);
         var bok=this.getBookTitlebyIsbn(isbn);
@@ -135,7 +142,7 @@ public class BookManagementManager {
         var bookItem=bookStore.getBookItem(id);
         if(bookItem==null) {
             logger.error("Unable to find item with id: {}",id);
-            return ResultMessage.Error;
+            return ResultMessage.NotFound;
         }
 
         logger.info("Searching för bok via bok item id with id: {}",id);
@@ -147,10 +154,12 @@ public class BookManagementManager {
         }
 
         logger.info("Deleting book ite with id: {}",id);
-        this.bookStore.deleteBookItem(bookItem.getId());
-        logger.info("Deleted book ite with id: {}",id);
-
-        return ResultMessage.Ok;
+        var resultFromDb= this.bookStore.deleteBookItem(bookItem.getId());
+        if(resultFromDb==0) {
+            logger.info("Deleted book ite with id: {}", id);
+            return ResultMessage.Ok;
+        }
+        return ResultMessage.Error;
     }
     public BookTitle getBookTitleByBookItemId(UUID bookItemId){
         return this.bookStore.getBookTitleByItem(bookItemId);
