@@ -6,9 +6,24 @@
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/BooksManagement/resources/BooksDB.db</jdbc-url>
-      <driver-properties>
-        <property name="enable_load_extension" value="true" />
-      </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="BooksDB.db" uuid="1254bcc5-bb4a-4e6e-9f36-5a5904398692">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/BooksManagement/resources/BooksDB.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="MembersDB.db" uuid="b2d165ca-dc36-4488-a317-28fe322c1243">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/MembershipAdministration/resources/MembersDB.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="MemberShipLendingDB.db" uuid="e41b26ee-1f6b-43bf-a86e-3f8c27aebfd7">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/MembershipLending/resources/MemberShipLendingDB.db</jdbc-url>
     </data-source>
   </component>
 </project>
