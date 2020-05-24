@@ -34,14 +34,17 @@ public class Main {
     private static UUID randomUUID11=UUID.randomUUID();
 
     public static void main(String[] args) {
-        deleteDataFromSqliteDB();
+        //deleteDataFromSqliteDB();
         setUp();
         var loginResult=login();
-        if(loginResult==MemberShipResultMessage.AdminOk)
-            visaHuvudMenu();
-        else if (loginResult==MemberShipResultMessage.Ok)
-            visaMedlemHuvudMenu();
-
+        if(loginResult==MemberShipResultMessage.Suspended)
+            System.out.println("Du är SUSPENDED!");
+        else {
+            if (loginResult == MemberShipResultMessage.AdminOk)
+                visaHuvudMenu();
+            else if (loginResult == MemberShipResultMessage.Ok)
+                visaMedlemHuvudMenu();
+        }
     }
 
     private static MemberShipResultMessage login() {
@@ -673,7 +676,7 @@ public class Main {
         medlemsRegister.registerNewLibraryMember(new Member(999,"19570505",
                 "Sven","Göran",
                 MemberRole.Admin,MemberStatus.Active,
-                "qaz",LocalDateTime.now()));
+                "999",LocalDateTime.now()));
         medlemsRegister.registerNewLibraryMember(new Member(1000,"19550404",
                 "Carl","Gustav",
                 MemberRole.PhD,MemberStatus.Active,
@@ -772,7 +775,7 @@ public class Main {
         bookTitleA.addBookItem(new BookItem(randomUUID4, ItemType.Audio));
 
         var bookTitleB= new BookTitle("9992-2321-31230",
-                "COVID-19 Största Bluff i Världshitoria","Noblepristagare i Medicin",
+                "Harry Potter","Anna Svensson",
                 LocalDateTime.of(2020, Month.MAY, 21, 5, 10));
         bookTitleB.addBookItem(new BookItem(randomUUID5, ItemType.Paper));
         bookTitleB.addBookItem(new BookItem(randomUUID6, ItemType.Paper));

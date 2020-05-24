@@ -114,10 +114,14 @@ public class MembershipManager {
             return MemberShipResultMessage.NotFound;
 
         if(memberId==member.getMemberId() && password.equals(member.getPassword())) {
-            if(member.getRole()==MemberRole.Admin)
-                return MemberShipResultMessage.AdminOk;
-            else
-                return MemberShipResultMessage.Ok;
+            if(member.getMemberStatus()==MemberStatus.Suspended)
+                return MemberShipResultMessage.Suspended;
+            else {
+                if (member.getRole() == MemberRole.Admin)
+                    return MemberShipResultMessage.AdminOk;
+                else
+                    return MemberShipResultMessage.Ok;
+            }
         }
         return MemberShipResultMessage.Error;
 
