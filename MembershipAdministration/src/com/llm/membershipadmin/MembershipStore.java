@@ -60,7 +60,7 @@ public class MembershipStore implements IMembershipStore {
             memberInsertSql.setString(4, member.getLastName());
             memberInsertSql.setString(5, member.getRole().name());
             memberInsertSql.setString(6, member.getMemberStatus().name());
-            memberInsertSql.setString(7, "");
+            memberInsertSql.setString(7, member.getPassword());
             memberInsertSql.setString(8, member.getDateCreated().toString());
             memberInsertSql.executeUpdate();
 

@@ -44,6 +44,7 @@ public class MembershipManager {
             case Postgraduate -> 5;
             case PhD -> 7;
             case Teacher -> 10;
+            case Admin-> 0;
         };
 
         logger.info("Add new member to database ID:{} Name:{} {} ", member.getMemberId(),member.getFirstName(),member.getLastName());
@@ -106,13 +107,19 @@ public class MembershipManager {
 
     }
 
-    public boolean login(int memberId, String password){
+    public MemberShipResultMessage login(int memberId, String password){
         logger.info("Entering method login with memberid:{} and password:{}", memberId, password);
         var member = this.membershipStore.getMember(memberId);
         if(member==null)
-            return false;
+            return MemberShipResultMessage.NotFound;
 
-        return (memberId==member.getMemberId() && password.equals(member.getPassword()));
+        if(memberId==member.getMemberId() && password.equals(member.getPassword())) {
+            if(member.getRole()==MemberRole.Admin)
+                return MemberShipResultMessage.AdminOk;
+            else
+                return MemberShipResultMessage.Ok;
+        }
+        return MemberShipResultMessage.Error;
 
     }
     public MemberShipResultMessage suspendMember(int memberId) {

@@ -225,9 +225,9 @@ class MembershipManagerTest {
 
         when(db.getMember(member1.getMemberId())).thenReturn(member1);
 
-        assertTrue(mgr.login(member1.getMemberId(),member1.getPassword()));
-        assertFalse(mgr.login(member1.getMemberId(),"qwe"));
-        assertFalse(mgr.login(12313,member1.getPassword()));
+        assertEquals(mgr.login(member1.getMemberId(),member1.getPassword()), MemberShipResultMessage.Ok);
+        assertEquals(mgr.login(member1.getMemberId(),"qwe"),MemberShipResultMessage.Error);
+        assertEquals(mgr.login(12313,member1.getPassword()), MemberShipResultMessage.NotFound);
     }
     public void login_ShouldReturnFalse(){
         var logger= mock(Logger.class);
@@ -242,9 +242,7 @@ class MembershipManagerTest {
 
         when(db.getMember(member1.getMemberId())).thenReturn(null);
 
-        assertFalse(mgr.login(member1.getMemberId(),member1.getPassword()));
-        assertFalse(mgr.login(member1.getMemberId(),"qwe"));
-        assertFalse(mgr.login(12313,member1.getPassword()));
+        assertEquals(mgr.login(member1.getMemberId(),member1.getPassword()),MemberShipResultMessage.NotFound);
     }
     @Test
     public void suspendMemberActivateMember_Correct(){
