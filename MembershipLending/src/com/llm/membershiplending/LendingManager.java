@@ -102,7 +102,6 @@ public class LendingManager {
             logger.info("Send message OnBookItemLended bookItemId:{}",lendingBookItem.getBookItemId());
             this.bus.post(new OnBookItemLended(lendingBookItem.getBookItemId()));
         }
-
         return LendingResultMessage.Ok;
     }
     public LendingResultMessage deleteMember(int memberId){

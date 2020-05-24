@@ -36,12 +36,15 @@ public class Main {
     public static void main(String[] args) {
         deleteDataFromSqliteDB();
         setUp();
-        //if(login())
-        visaHuvudMenu();
+        var loginResult=login();
+        if(loginResult==MemberShipResultMessage.AdminOk)
+            visaHuvudMenu();
+        else if (loginResult==MemberShipResultMessage.Ok)
+            visaMedlemHuvudMenu();
 
     }
 
-    private static boolean login() {
+    private static MemberShipResultMessage login() {
         System.out.println("-----------");
         System.out.println("1. Logga in");
         System.out.println("9. Avsluta");
@@ -65,11 +68,12 @@ public class Main {
         return medlemsRegister.login(memberId, password);
 
 
+
     }
 
     private static void visaHuvudMenu() {
         while(true) {
-            System.out.println("Library Management System");
+            System.out.println("Library Admin Management System");
             System.out.println("=========================");
             System.out.println("1. Medlemshantering register");
             System.out.println("2. Bok register");
@@ -86,6 +90,28 @@ public class Main {
                 case 1 -> visaMedlemskapMenu();
                 case 2 -> visaMenuForBocker();
                 case 3 -> visaMenuForUtlaning();
+                default -> System.out.println("Felaktig val");
+            }
+            System.out.println();
+        }
+    }
+    private static void visaMedlemHuvudMenu() {
+        while(true) {
+            System.out.println("Library for members");
+            System.out.println("=========================");
+            System.out.println("1. Sök bok");
+            System.out.println("2. Hantering av lån (lån/återlämning/sök)");
+            System.out.println("3. Avsluta");
+            System.out.print("Gör ditt val -->");
+
+            var scan = new Scanner(System.in);
+            int menuVal=scan.nextInt();
+            if (menuVal == 3)
+                System.exit(0);
+
+            switch (menuVal) {
+                case 1 -> sokTillgangligBok();
+                case 2 -> visaMenuForUtlaning();
                 default -> System.out.println("Felaktig val");
             }
             System.out.println();
@@ -120,7 +146,7 @@ public class Main {
 
         var books=bokRegister.searchBookItemsbyIsbnAvailableToBorrow(isbn);
         System.out.println("------------------");
-        if(books.size()==0) {
+        if(books==null || books.size()==0) {
             System.out.println("Ingen book kunde hittas med detta isbn");
         }
         else {
@@ -644,6 +670,10 @@ public class Main {
 
     public static void addMembers()
     {
+        medlemsRegister.registerNewLibraryMember(new Member(999,"19570505",
+                "Sven","Göran",
+                MemberRole.Admin,MemberStatus.Active,
+                "qaz",LocalDateTime.now()));
         medlemsRegister.registerNewLibraryMember(new Member(1000,"19550404",
                 "Carl","Gustav",
                 MemberRole.PhD,MemberStatus.Active,
