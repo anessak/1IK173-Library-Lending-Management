@@ -3,13 +3,17 @@ package com.llm.membershipadmin;
 import java.util.ArrayList;
 
 public interface IMembershipStore {
-    void insertNewMember(Member member);
+    int insertNewMember(Member member);
 
-    void changeMemberStatus(int memberId, MemberStatus status);
+    void reActivateUser(int memberId);
+
+    void suspendUser(int memberId);
 
     Member getMember(int memberId);
 
-    void deleteMember(Member member);
+    int deleteMember(Member member);
+
+    void updateMember(Member memberToUpdate);
 
     ArrayList<Member> searchMembers(int memberIdWildCard);
 }

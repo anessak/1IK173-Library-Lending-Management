@@ -37,10 +37,10 @@ public class BookStore implements IBookStore {
             createDbStatement.execute(sqlBookItems);
 
             createDbStatement.closeOnCompletion();
-            conn.commit();
             logger.info("Book database succesfully created");
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     public void insertNewBookTitle(BookTitle bokTitle) {
@@ -68,6 +68,7 @@ public class BookStore implements IBookStore {
             conn.commit();
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     public void insertNewBookItem(BookItem bookItem, String bookIsbn) {
@@ -86,6 +87,7 @@ public class BookStore implements IBookStore {
             conn.commit();
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     public BookTitle getBookTitle(String isbn){
@@ -107,6 +109,7 @@ public class BookStore implements IBookStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitle;
     }
@@ -129,6 +132,7 @@ public class BookStore implements IBookStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return book;
     }
@@ -161,6 +165,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitles;
     }
@@ -192,6 +197,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitle;
     }
@@ -209,21 +215,40 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
-
     @Override
-    public void deleteBook(String isbn) {
+    public void updateBookTitle(BookTitle bookTitle){
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
-            PreparedStatement pstmt1 = conn.prepareStatement(
-                    "DELETE FROM BookItems WHERE bookisbn = ?");
-            pstmt1.setString(1, isbn);
-            pstmt1.executeUpdate();
-            PreparedStatement pstmt2 = conn.prepareStatement(
-                    "DELETE FROM BookTitles WHERE isbn = ?");
-            pstmt2.setString(1, isbn);
-            pstmt2.executeUpdate();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE BookTitles SET title = ?, author = ?, releasedate = ? WHERE isbn = ?");
+            pstmt.setString(1, bookTitle.getTitle());
+            pstmt.setString(2, bookTitle.getAuthor());
+            pstmt.setString(3, bookTitle.getReleaseDate().toString());
+            pstmt.setString(4, bookTitle.getIsbn());
+            pstmt.executeUpdate();
+            conn.commit();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void updateBookItem(UUID bookIsbn, BookItem bookItem){
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE BookItems SET itemtype = ?, dateadded = ?," +
+                            "itemstate = ?, bookisbn = ? WHERE id = ?");
+            pstmt.setString(1, bookItem.getItemType().name());
+            pstmt.setString(2, bookItem.getDateAdded().toString());
+            pstmt.setString(3, bookItem.getItemState().name());
+            pstmt.setString(4, bookIsbn.toString());
+            pstmt.setString(5, bookItem.getId().toString());
+            pstmt.executeUpdate();
             conn.commit();
 
         } catch (SQLException e) {
@@ -232,7 +257,31 @@ public class BookStore implements IBookStore {
     }
 
     @Override
-    public void deleteBookItem(UUID itemId) {
+    public int deleteBook(String isbn) {
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+            conn.setAutoCommit(false);
+            PreparedStatement pstmt1 = conn.prepareStatement(
+                    "DELETE FROM BookItems WHERE bookisbn = ?");
+            pstmt1.setString(1, isbn);
+            pstmt1.executeUpdate();
+
+            PreparedStatement pstmt2 = conn.prepareStatement(
+                    "DELETE FROM BookTitles WHERE isbn = ?");
+            pstmt2.setString(1, isbn);
+            pstmt2.executeUpdate();
+
+            conn.commit();
+            return 0;
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public int deleteBookItem(UUID itemId) {
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
             PreparedStatement pstmt1 = conn.prepareStatement(
@@ -240,9 +289,12 @@ public class BookStore implements IBookStore {
             pstmt1.setString(1, itemId.toString());
             pstmt1.executeUpdate();
             conn.commit();
+            return 0;
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
 
@@ -268,6 +320,7 @@ public class BookStore implements IBookStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return bookTitle;
     }

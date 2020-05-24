@@ -33,8 +33,9 @@ public class MembershipStore implements IMembershipStore {
                     "datecreated text, datesuspended);";
 
             String sqlDeletedMember = "CREATE TABLE IF NOT EXISTS DeletedMembers " +
-                    "(memberid integer PRIMARY KEY, ssn text NOT NULL, firstname text, " +
-                    "lastname text, role text, datedeleted);";
+                    "(memberid integer, ssn text NOT NULL, firstname text, " +
+                    "lastname text, role text, datedeleted,  " +
+                    "PRIMARY KEY (memberid,datedeleted));";
 
             createDbStatement.execute(sqlMember);
             createDbStatement.execute(sqlDeletedMember);
@@ -47,7 +48,7 @@ public class MembershipStore implements IMembershipStore {
         }
     }
     @Override
-    public void insertNewMember(Member member) {
+    public int insertNewMember(Member member) {
 
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement memberInsertSql =
@@ -66,19 +67,40 @@ public class MembershipStore implements IMembershipStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
+        return 0;
     }
     @Override
-    public void changeMemberStatus(int memberId, MemberStatus status){
+    public void suspendUser(int memberId){
         try (Connection conn = DriverManager.getConnection(this.connectionString)) {
             PreparedStatement sql =
-                    conn.prepareStatement("UPDATE Members SET status = ? WHERE memberid = ?");
-            sql.setInt(1, memberId);
-            sql.setString(2, status.name());
+                    conn.prepareStatement("UPDATE Members SET status = ?, datesuspended = ?" +
+                            " WHERE memberid = ?");
+            sql.setString(1, MemberStatus.Suspended.name());
+            sql.setString(2, LocalDateTime.now().toString());
+            sql.setInt(3, memberId);
             sql.executeUpdate();
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void reActivateUser(int memberId){
+        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+            PreparedStatement sql =
+                    conn.prepareStatement("UPDATE Members SET status = ?, datesuspended = ? WHERE memberid = ?");
+            sql.setString(1, MemberStatus.Active.name());
+            sql.setString(2, "");
+            sql.setInt(3, memberId);
+            sql.executeUpdate();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -106,7 +128,7 @@ public class MembershipStore implements IMembershipStore {
         return member;
     }
     @Override
-    public void deleteMember(Member memberToDelete){
+    public int deleteMember(Member memberToDelete){
         try (Connection conn = DriverManager.getConnection(this.connectionString)){
             conn.setAutoCommit(false);
             PreparedStatement pstmt  = conn.prepareStatement(
@@ -115,7 +137,7 @@ public class MembershipStore implements IMembershipStore {
 
             PreparedStatement sql =
                     conn.prepareStatement(
-                            "INSERT INTO Members(memberid, ssn, firstname, lastname, role," +
+                            "INSERT INTO DeletedMembers(memberid, ssn, firstname, lastname, role," +
                             "datedeleted) VALUES(?,?,?,?,?,?)");
             sql.setInt(1, memberToDelete.getMemberId());
             sql.setString(2, memberToDelete.getSsn());
@@ -123,12 +145,40 @@ public class MembershipStore implements IMembershipStore {
             sql.setString(4, memberToDelete.getLastName());
             sql.setString(5, memberToDelete.getRole().name());
             sql.setString(6, LocalDateTime.now().toString());
+
+            pstmt.executeUpdate();
             sql.executeUpdate();
 
             conn.commit();
             }
         catch (SQLException throwables) {
             logger.error(throwables.getMessage());
+            throwables.printStackTrace();
+            return -1;
+        }
+        return 0;
+    }
+    @Override
+    public void updateMember(Member memberToUpdate){
+        try (Connection conn = DriverManager.getConnection(this.connectionString)){
+
+            PreparedStatement sql  = conn.prepareStatement(
+                    "UPDATE Members SET ssn = ?, firstname = ?, " +
+                            "lastname = ?, role = ?, status = ?, " +
+                            "password = ? WHERE memberid = ?");
+            sql.setString(1,memberToUpdate.getSsn());
+            sql.setString(2,memberToUpdate.getFirstName());
+            sql.setString(3,memberToUpdate.getLastName());
+            sql.setString(4,memberToUpdate.getRole().name());
+            sql.setString(5,memberToUpdate.getMemberStatus().name());
+            sql.setString(6,memberToUpdate.getPassword());
+
+            sql.executeUpdate();
+
+        }
+        catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+            throwables.printStackTrace();
         }
     }
 

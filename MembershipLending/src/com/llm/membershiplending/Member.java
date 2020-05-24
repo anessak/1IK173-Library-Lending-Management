@@ -46,7 +46,7 @@ public class Member {
 
     public void increaseDelayedReturnBorrowedBooksCounter() {
         this.delayedReturnBorrowedBooksCounter++;
-        if (this.delayedReturnBorrowedBooksCounter>=2)
+        if (this.delayedReturnBorrowedBooksCounter>=2 && this.delayedReturnBorrowedBooksCounter%2==0)
             this.increaseSuspendedTimesCounter();
     }
 }

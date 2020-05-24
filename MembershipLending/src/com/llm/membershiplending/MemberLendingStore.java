@@ -47,6 +47,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             logger.info("Member database succesfully created");
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -68,6 +69,7 @@ public class MemberLendingStore implements IMemberLendingStore {
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -93,6 +95,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
             return -1;
         }
         return 0;
@@ -136,6 +139,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return memberBorrowedItems;
         //return  memberBorrowedItems.stream().sorted(Comparator.comparing(MemberLending::getLendingDate))
@@ -152,13 +156,15 @@ public class MemberLendingStore implements IMemberLendingStore {
             getMemberSql.setInt(1, memberId);
 
             ResultSet result = getMemberSql.executeQuery();
-            member = new Member(result.getInt("memberId"),
-                    result.getInt("delayedReturnBorrowedBooksCounter"),
-                    result.getInt("suspendedTimesCounter"),
-                    result.getInt("maximumNumberOfItemsOneCanBorrow"));
-        
+            while (result.next()) {
+                member = new Member(result.getInt("memberId"),
+                        result.getInt("delayedReturnBorrowedBooksCounter"),
+                        result.getInt("suspendedTimesCounter"),
+                        result.getInt("maximumNumberOfItemsOneCanBorrow"));
+            }
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
         return member;
     }
@@ -179,6 +185,7 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
     @Override
@@ -198,6 +205,25 @@ public class MemberLendingStore implements IMemberLendingStore {
 
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public int deleteMember(int memberId) {
+        Member member = null;
+        try (Connection conn = DriverManager.getConnection(this.connectionString)) {
+
+            PreparedStatement deleteMemberSql =
+                    conn.prepareStatement("DELETE FROM Member WHERE memberid = ?");
+            deleteMemberSql.setInt(1, memberId);
+
+            deleteMemberSql.executeUpdate();
+            return 0;
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
 }

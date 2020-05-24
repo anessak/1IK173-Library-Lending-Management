@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/.documentation" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
     </content>
     <orderEntry type="jdk" jdkName="14" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -14,5 +15,7 @@
     <orderEntry type="module" module-name="MembershipLending" />
     <orderEntry type="module" module-name="MembershipAdministration" />
     <orderEntry type="library" name="org.greenrobot:eventbus:3.2.0" level="project" />
+    <orderEntry type="library" name="org.junit.jupiter:junit-jupiter:5.6.2" level="project" />
+    <orderEntry type="library" name="org.mockito:mockito-core:3.3.3" level="project" />
   </component>
 </module>

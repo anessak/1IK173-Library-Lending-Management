@@ -1,7 +1,7 @@
 # 1IK173-Library-Lending-Management
 ### Introduktion
 Projektet består av en konsollapplikation och tre separata oberoende moduler. (Se Modules sektionen).
-Man använder openJDK 14. Om man har något annat får man ändra det i Intellij under File, klicka på Project Structure och under Project Settings klicka på Project. Efter det så visas (till höger) Project SKD dropdown där man ändrar.
+Man använder JDK 14. Om man har något annat får man ändra det i Intellij under File, klicka på Project Structure och under Project Settings klicka på Project. Efter det så visas (till höger) Project SKD dropdown där man ändrar.
 <img src=".documentation/ProjectJDK.jpg" width="75%">
 
 Man använder log4j för loggning, junit5 för unittester med mockito för mocking av klasser.

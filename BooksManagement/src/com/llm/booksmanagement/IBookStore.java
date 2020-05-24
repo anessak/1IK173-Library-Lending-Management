@@ -16,9 +16,13 @@ public interface IBookStore {
 
     void updateBookState(UUID bookItemId, BookItemState itemState);
 
-    void deleteBook(String isbn);
+    int deleteBook(String isbn);
 
-    void deleteBookItem(UUID itemId);
+    int deleteBookItem(UUID itemId);
+
+    void updateBookTitle(BookTitle bookTitle);
+
+    void updateBookItem(UUID bookIsbn, BookItem bookItem);
 
     BookTitle getBookTitleByItem(UUID bookItemId);
 }
