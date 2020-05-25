@@ -21,20 +21,8 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-    private static UUID randomUUID1=UUID.randomUUID();
-    private static UUID randomUUID2=UUID.randomUUID();
-    private static UUID randomUUID3=UUID.randomUUID();
-    private static UUID randomUUID4=UUID.randomUUID();
-    private static UUID randomUUID5=UUID.randomUUID();
-    private static UUID randomUUID6=UUID.randomUUID();
-    private static UUID randomUUID7=UUID.randomUUID();
-    private static UUID randomUUID8=UUID.randomUUID();
-    private static UUID randomUUID9=UUID.randomUUID();
-    private static UUID randomUUID10=UUID.randomUUID();
-    private static UUID randomUUID11=UUID.randomUUID();
-
     public static void main(String[] args) {
-        //deleteDataFromSqliteDB();
+        deleteDataFromSqliteDB();
         setUp();
         var loginResult=login();
         if(loginResult==MemberShipResultMessage.Suspended)
@@ -773,6 +761,8 @@ public class Main {
         bookTitleA.addBookItem(new BookItem(randomUUID2, ItemType.Paper));
         bookTitleA.addBookItem(new BookItem(randomUUID3, ItemType.Paper));
         bookTitleA.addBookItem(new BookItem(randomUUID4, ItemType.Audio));
+        bookTitleA.addBookItem(new BookItem(randomUUID40, ItemType.Video));
+        bookTitleA.addBookItem(new BookItem(randomUUID41, ItemType.Video));
 
         var bookTitleB= new BookTitle("9992-2321-31230",
                 "Harry Potter","Anna Svensson",
@@ -781,8 +771,35 @@ public class Main {
         bookTitleB.addBookItem(new BookItem(randomUUID6, ItemType.Paper));
         bookTitleB.addBookItem(new BookItem(randomUUID7, ItemType.Video));
 
+        var bookTitleC= new BookTitle("2222-2321-31230",
+                "Gone Girl","Patrik Sjöberg",
+                LocalDateTime.of(2008, Month.NOVEMBER, 15, 5, 10));
+        bookTitleC.addBookItem(new BookItem(randomUUID8, ItemType.Paper));
+        bookTitleC.addBookItem(new BookItem(randomUUID9, ItemType.Video));
+
+        var bookTitleD= new BookTitle("3333-2321-31230",
+                "Vinterkriget","Rudolf Hess",
+                LocalDateTime.of(1999, Month.JANUARY, 2, 5, 10));
+        bookTitleD.addBookItem(new BookItem(randomUUID10, ItemType.Audio));
+        bookTitleD.addBookItem(new BookItem(randomUUID11, ItemType.Video));
+
+        var bookTitleE= new BookTitle("4444-2321-31230",
+                "Island","John Wick",
+                LocalDateTime.of(2020, Month.MAY, 1, 5, 10));
+        bookTitleE.addBookItem(new BookItem(randomUUID12, ItemType.Video));
+
+        var bookTitleF= new BookTitle("5555-2321-31230",
+                "Matrix","Shiro Matashi",
+                LocalDateTime.of(2010, Month.DECEMBER, 29, 4, 10));
+        bookTitleF.addBookItem(new BookItem(randomUUID13, ItemType.Paper));
+        bookTitleF.addBookItem(new BookItem(randomUUID14, ItemType.Paper));
+
         bokRegister.addBookTitleToLibrary(bookTitleA);
         bokRegister.addBookTitleToLibrary(bookTitleB);
+        bokRegister.addBookTitleToLibrary(bookTitleC);
+        bokRegister.addBookTitleToLibrary(bookTitleD);
+        bokRegister.addBookTitleToLibrary(bookTitleE);
+        bokRegister.addBookTitleToLibrary(bookTitleF);
 
     }
     public static void deleteDataFromSqliteDB()
@@ -806,5 +823,20 @@ public class Main {
             System.out.println("Failed to delete the file.");
         }
     }
-
+    private static UUID randomUUID1=UUID.randomUUID();
+    private static UUID randomUUID2=UUID.randomUUID();
+    private static UUID randomUUID3=UUID.randomUUID();
+    private static UUID randomUUID4=UUID.randomUUID();
+    private static UUID randomUUID40=UUID.randomUUID();
+    private static UUID randomUUID41=UUID.randomUUID();
+    private static UUID randomUUID5=UUID.randomUUID();
+    private static UUID randomUUID6=UUID.randomUUID();
+    private static UUID randomUUID7=UUID.randomUUID();
+    private static UUID randomUUID8=UUID.randomUUID();
+    private static UUID randomUUID9=UUID.randomUUID();
+    private static UUID randomUUID10=UUID.randomUUID();
+    private static UUID randomUUID11=UUID.randomUUID();
+    private static UUID randomUUID12=UUID.randomUUID();
+    private static UUID randomUUID13=UUID.randomUUID();
+    private static UUID randomUUID14=UUID.randomUUID();
 }
