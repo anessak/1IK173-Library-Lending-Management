@@ -9,7 +9,7 @@ Loggning sker till en fil och ska finnas under "modulen"/logs (Exempel: BookMana
 
 För att spara data använder man den enkla fildatabasen Sqlite som förstår enkla SQL syntax så att man lättare kan söka och filtrera med SQL.
 Sqlite kommer att spara databasen som en fil tex bookmanagememtDB.db.
-Varje modul har egen databas för enklare administration. Kommunkation mellan moduler sker med hjälp av events (händelser) med greenrobot eventbus.
+Varje modul har egen databas för enklare administration. Kommunikation mellan moduler sker med hjälp av events (händelser) med greenrobot eventbus.
 
 ## Viktiga Use Case (användningsfall) 
 Första försöket att förstå vilka use cases det kan finnas.
